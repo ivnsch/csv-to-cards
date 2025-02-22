@@ -2,17 +2,19 @@ import { useState } from "react";
 import "./App.css";
 import * as Papa from "papaparse";
 
+export type CsvRow = { [key: string]: string };
+
 function UploadCsv() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<CsvRow[]>([]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    Papa.parse(file, {
-      header: true, // Set to false if you don't want headers
+    Papa.parse<CsvRow>(file, {
+      header: true,
       skipEmptyLines: true,
-      complete: (result) => {
+      complete: (result: Papa.ParseResult<CsvRow>) => {
         setData(result.data);
         console.log(result.data);
       },
