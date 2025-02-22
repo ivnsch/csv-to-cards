@@ -1,11 +1,10 @@
-import { useState } from "react";
 import "./App.css";
 import * as Papa from "papaparse";
-
-export type CsvRow = { [key: string]: string };
+import { CsvRow, useStore } from "./store";
 
 function UploadCsv() {
-  const [data, setData] = useState<CsvRow[]>([]);
+  const setData = useStore((state) => state.setData);
+  const data = useStore((state) => state.data);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
