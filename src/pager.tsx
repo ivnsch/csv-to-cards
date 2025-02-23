@@ -121,9 +121,8 @@ const styles: Record<string, React.CSSProperties> = {
   card: {
     width: "90%",
     padding: 20,
-    backgroundColor: "#1E1E1E",
     marginBottom: "20px",
-    borderRadius: 12,
+    borderLeft: "0.5px solid white",
   },
   header: { color: "#999999" },
   cell: { flex: 1, padding: 8, textAlign: "center", color: "white" },
