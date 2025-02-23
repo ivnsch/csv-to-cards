@@ -89,7 +89,6 @@ const styles: Record<string, React.CSSProperties> = {
     width: "100%",
   },
   filterText: {
-    fontWeight: "bold",
     textAlign: "center",
     color: "white",
     marginLeft: 10,
