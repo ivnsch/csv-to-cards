@@ -99,8 +99,6 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#1E1E1E",
     marginBottom: "20px",
     borderRadius: 12,
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
     position: "relative",
   },
   header: { color: "#999999" },
