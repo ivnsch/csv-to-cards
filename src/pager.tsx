@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { CsvRow, Filters, useStore } from "./store";
+import { loadCSV } from "./db";
 
 export default function PagerScreen() {
   const data = useStore((state) => state.data);
   const filters = useStore((state) => state.filters);
 
   const [index, setIndex] = useState(0);
+  const setData = useStore((state) => state.setData);
 
   const nextCard = useCallback(() => {
     if (!data?.rows) return;
@@ -15,6 +17,17 @@ export default function PagerScreen() {
   const prevCard = useCallback(() => {
     setIndex((prev) => (prev > 0 ? prev - 1 : prev));
   }, []);
+
+  // load existing file if there's any
+  useEffect(() => {
+    const setFromCsv = async () => {
+      const saved = await loadCSV();
+      if (saved) {
+        setData(saved);
+      }
+    };
+    setFromCsv();
+  }, [setData]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -29,6 +42,7 @@ export default function PagerScreen() {
     <div style={styles.container}>
       {data && (
         <div>
+          <div>{data.name}</div>
           <div>
             <Page
               key={index}

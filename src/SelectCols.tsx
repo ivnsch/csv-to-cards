@@ -1,14 +1,32 @@
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { useStore } from "./store";
+import { useEffect } from "react";
+import { loadCSV } from "./db";
 
 function SelectCols() {
   const filters = useStore((state) => state.filters);
+
   const toggleFilter = useStore((state) => state.toggleFilter);
   const navigate = useNavigate();
 
+  const data = useStore((state) => state.data);
+  const setData = useStore((state) => state.setData);
+
+  // load existing file if there's any
+  useEffect(() => {
+    const setFromCsv = async () => {
+      const saved = await loadCSV();
+      if (saved) {
+        setData(saved);
+      }
+    };
+    setFromCsv();
+  }, [setData]);
+
   return (
     <div>
+      {data && <div>{data.name}</div>}
       <div style={styles.label}>Select columns to show</div>
       {Object.keys(filters).map((header) => (
         <FilterRow
