@@ -107,6 +107,7 @@ const styles = {
     color: "#EAEAEA",
     fontSize: 24,
     marginBottom: 10,
+    whiteSpace: "pre-line",
   },
   text: {
     color: "#EAEAEA",
