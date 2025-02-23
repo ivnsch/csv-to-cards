@@ -1,9 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { useStore } from "./store";
 
 function SelectCols() {
   const filters = useStore((state) => state.filters);
   const toggleFilter = useStore((state) => state.toggleFilter);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -16,6 +18,13 @@ function SelectCols() {
           toggleFilter={toggleFilter}
         />
       ))}
+      <button
+        onClick={() => {
+          navigate("/pager");
+        }}
+      >
+        Start
+      </button>
     </div>
   );
 }
