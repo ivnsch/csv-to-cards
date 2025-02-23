@@ -44,7 +44,6 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontWeight: "bold",
     fontSize: "18px",
     borderBottom: "0.5px solid gray",
   },
