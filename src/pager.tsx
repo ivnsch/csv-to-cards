@@ -87,7 +87,7 @@ const PageEntry = ({ entry }: { entry: [string, string] }) => {
   );
 };
 
-const styles = {
+const styles: Record<string, React.CSSProperties> = {
   page: {
     flex: 1,
     justifyContent: "center",
@@ -99,7 +99,6 @@ const styles = {
     backgroundColor: "#1E1E1E",
     marginBottom: "20px",
     borderRadius: 12,
-    shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 6,
     position: "relative",
@@ -139,8 +138,8 @@ const styles = {
   pageIndexContainer: {
     position: "absolute",
     width: "100%",
-    left: "-10px",
-    bottom: "10px",
+    left: -10,
+    bottom: 10,
   },
   previousButton: {
     marginRight: "10px",

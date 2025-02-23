@@ -50,7 +50,7 @@ const FilterRow = ({
 
 export default SelectCols;
 
-const styles = {
+const styles: Record<string, React.CSSProperties> = {
   label: {
     marginBottom: "20px",
   },
@@ -88,7 +88,6 @@ const styles = {
   },
   row: {
     flexDirection: "row",
-    paddingVertical: 5,
     borderBottomWidth: 1,
     borderColor: "#333",
   },
