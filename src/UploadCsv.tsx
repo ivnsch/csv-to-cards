@@ -27,26 +27,6 @@ function UploadCsv() {
   return (
     <div>
       <input type="file" accept=".csv" onChange={handleFileUpload} />
-      {data.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              {Object.keys(data[0]).map((key) => (
-                <th key={key}>{key}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, i) => (
-              <tr key={i}>
-                {Object.values(row).map((val, j) => (
-                  <td key={j}>{val as string}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
     </div>
   );
 }
