@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CsvRow, Filters, useStore } from "./store";
 
 export default function PagerScreen() {
@@ -9,7 +9,17 @@ export default function PagerScreen() {
 
   const nextCard = () =>
     setIndex((prev) => (prev < data.length - 1 ? prev + 1 : prev));
+
   const prevCard = () => setIndex((prev) => (prev > 0 ? prev - 1 : prev));
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") nextCard();
+      if (event.key === "ArrowLeft") prevCard();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <div style={styles.container}>
