@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 function UploadCsv() {
   const setData = useStore((state) => state.setData);
-  const data = useStore((state) => state.data);
   const navigate = useNavigate();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
