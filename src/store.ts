@@ -1,23 +1,24 @@
 import { create } from "zustand";
+import { MyCsv } from "./db";
 
 export type CsvRow = { [key: string]: string };
 export type Filters = { [key: string]: boolean };
 
 type Store = {
-  data: CsvRow[];
+  data: MyCsv | null;
   filters: Filters;
-  setData: (newData: CsvRow[]) => void;
+  setData: (newData: MyCsv) => void;
   toggleFilter: (header: string) => void;
 };
 
 export const useStore = create<Store>((set) => ({
-  data: [],
+  data: null,
   filters: {},
   setData: (newData) => {
     set({ data: newData });
-    if (newData.length > 0) {
+    if (newData) {
       set(() => ({
-        filters: toFilters(newData),
+        filters: toFilters(newData.rows),
       }));
     }
   },
