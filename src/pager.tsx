@@ -108,9 +108,36 @@ const PageEntry = ({ entry }: { entry: [string, string] }) => {
   return (
     <div style={styles.entry}>
       <div style={styles.header}>{key}</div>
-      <div style={styles.value}>{value}</div>
+      {isValidUrl(value) ? (
+        <a
+          href={value}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.value}
+        >
+          {value}
+        </a>
+      ) : (
+        <div style={styles.value}>{value}</div>
+      )}
     </div>
   );
+};
+
+const isValidUrl = (text: string): boolean => {
+  try {
+    new URL(text); // ✅ This will throw an error if it's not a valid URL
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
+const baseValue: React.CSSProperties = {
+  color: "#EAEAEA",
+  fontSize: 24,
+  marginBottom: 10,
+  whiteSpace: "pre-line",
 };
 
 const styles: Record<string, React.CSSProperties> = {
@@ -134,10 +161,11 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1,
   },
   value: {
-    color: "#EAEAEA",
-    fontSize: 24,
-    marginBottom: 10,
-    whiteSpace: "pre-line",
+    ...baseValue,
+  },
+  valueLink: {
+    ...baseValue,
+    cursor: "pointer",
   },
   text: {
     color: "#EAEAEA",
