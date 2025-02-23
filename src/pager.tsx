@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useStore } from "./store";
+import { CsvRow, Filters, useStore } from "./store";
 
 export default function PagerScreen() {
   const data = useStore((state) => state.data);
@@ -14,16 +14,20 @@ export default function PagerScreen() {
   return (
     <div style={styles.container}>
       <div>
-        <div
-          style={{
-            border: "1px solid black",
-            padding: "20px",
-            marginBottom: "10px",
-          }}
-        >
-          {JSON.stringify(data[index])}
+        <div>
+          <Page
+            key={index}
+            content={data[index]}
+            index={index}
+            filters={filters}
+            pageCount={data.length}
+          />
         </div>
-        <button onClick={prevCard} disabled={index === 0}>
+        <button
+          style={styles.previousButton}
+          onClick={prevCard}
+          disabled={index === 0}
+        >
           Previous
         </button>
         <button onClick={nextCard} disabled={index === data.length - 1}>
@@ -34,23 +38,61 @@ export default function PagerScreen() {
   );
 }
 
+const Page = ({
+  content,
+  index,
+  filters,
+  pageCount,
+}: {
+  content: CsvRow;
+  index: number;
+  filters: Filters;
+  pageCount: number;
+}) => {
+  return (
+    <div style={styles.page}>
+      <div style={styles.card}>
+        {Object.entries(content)
+          .filter(([key, _]) => filters[key])
+          .map((entry) => (
+            <PageEntry key={entry[0]} entry={entry} />
+          ))}
+        <div style={styles.pageIndexContainer}>
+          <div style={styles.pageIndex}>
+            {index + 1} / {pageCount}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PageEntry = ({ entry }: { entry: [string, string] }) => {
+  const [key, value] = entry;
+  return (
+    <div style={{ flexDirection: "column", marginBottom: 5 }}>
+      <div style={styles.header}>{key}</div>
+      <div style={styles.value}>{value}</div>
+    </div>
+  );
+};
+
 const styles = {
   page: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#121212",
   },
   card: {
     width: "90%",
     padding: 20,
     backgroundColor: "#1E1E1E",
-
+    marginBottom: "20px",
     borderRadius: 12,
     shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 6,
-    elevation: 5, // Android shadow
+    position: "relative",
   },
   header: { color: "#999999" },
   cell: { flex: 1, padding: 8, textAlign: "center", color: "white" },
@@ -79,16 +121,17 @@ const styles = {
     marginBottom: 8,
   },
   pageIndex: {
-    bottom: 20,
-    right: 30,
     textAlign: "right",
-    position: "absolute",
-
     color: "#999999",
-    fontSize: 16,
+    fontSize: 12,
   },
   pageIndexContainer: {
-    marginTop: 10,
-    alignSelf: "flex-end",
+    position: "absolute",
+    width: "100%",
+    left: "-10px",
+    bottom: "10px",
+  },
+  previousButton: {
+    marginRight: "10px",
   },
 };
