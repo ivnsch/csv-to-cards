@@ -108,12 +108,17 @@ const PageEntry = ({ entry }: { entry: [string, string] }) => {
   return (
     <div style={styles.entry}>
       <div style={styles.header}>{key}</div>
-      {isValidUrl(value) ? (
+      {isImageUrl(value) ? (
+        <div style={styles.imageContainer}>
+          <img src={value} alt="Loaded content" style={styles.image} />
+          <div style={styles.imageText}>{value}</div>
+        </div>
+      ) : isValidUrl(value) ? (
         <a
           href={value}
           target="_blank"
           rel="noopener noreferrer"
-          style={styles.value}
+          style={styles.valueLink}
         >
           {value}
         </a>
@@ -126,11 +131,15 @@ const PageEntry = ({ entry }: { entry: [string, string] }) => {
 
 const isValidUrl = (text: string): boolean => {
   try {
-    new URL(text); // ✅ This will throw an error if it's not a valid URL
+    new URL(text);
     return true;
   } catch (_) {
     return false;
   }
+};
+
+const isImageUrl = (url: string): boolean => {
+  return /\.(jpeg|jpg|gif|png|webp|svg)$/i.test(url.trim());
 };
 
 const baseValue: React.CSSProperties = {
@@ -162,6 +171,10 @@ const styles: Record<string, React.CSSProperties> = {
   },
   value: {
     ...baseValue,
+  },
+  imageText: {
+    ...baseValue,
+    fontSize: 12,
   },
   valueLink: {
     ...baseValue,
@@ -196,6 +209,11 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     flexDirection: "column",
     marginBottom: 5,
+    alignItems: "flex-start",
+  },
+  imageContainer: {
+    display: "flex",
+    flexDirection: "column",
     alignItems: "flex-start",
   },
 };
