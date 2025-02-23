@@ -2,7 +2,14 @@ import "./App.css";
 import * as Papa from "papaparse";
 import { CsvRow, useStore } from "./store";
 import { useNavigate } from "react-router-dom";
-import { MyCsv, saveCSV } from "./db";
+import {
+  deleteFilters,
+  deletePage,
+  MyCsv,
+  saveCSV,
+  saveFilters,
+  savePage,
+} from "./db";
 
 function UploadCsv() {
   const setData = useStore((state) => state.setData);
@@ -26,7 +33,10 @@ function UploadCsv() {
         const csv = new MyCsv(file.name, csvEntries);
 
         setData(csv);
+
         saveCSV(csv);
+        deleteFilters();
+        deletePage();
 
         navigate("/select-cols");
       },

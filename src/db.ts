@@ -27,6 +27,11 @@ export const loadFilters = async (): Promise<Filters | null> => {
   return (await db.get("csvData", "filters")) || null;
 };
 
+export const deleteFilters = async () => {
+  const db = await dbPromise;
+  await db.delete("csvData", "filters");
+};
+
 export const savePage = async (page: number) => {
   const db = await dbPromise;
   await db.put("csvData", page, "page");
@@ -35,6 +40,11 @@ export const savePage = async (page: number) => {
 export const loadPage = async (): Promise<number | null> => {
   const db = await dbPromise;
   return (await db.get("csvData", "page")) || null;
+};
+
+export const deletePage = async () => {
+  const db = await dbPromise;
+  await db.delete("csvData", "page");
 };
 
 export class MyCsv {
