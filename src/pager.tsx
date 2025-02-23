@@ -67,17 +67,17 @@ const Page = ({
 }) => {
   return (
     <div style={styles.page}>
+      <div style={styles.pageIndexContainer}>
+        <div style={styles.pageIndex}>
+          {index + 1} / {pageCount}
+        </div>
+      </div>
       <div style={styles.card}>
         {Object.entries(content)
           .filter(([key, _]) => filters[key])
           .map((entry) => (
             <PageEntry key={entry[0]} entry={entry} />
           ))}
-        <div style={styles.pageIndexContainer}>
-          <div style={styles.pageIndex}>
-            {index + 1} / {pageCount}
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -95,9 +95,8 @@ const PageEntry = ({ entry }: { entry: [string, string] }) => {
 
 const styles: Record<string, React.CSSProperties> = {
   page: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    display: "flex",
+    position: "relative",
   },
   card: {
     width: "90%",
@@ -105,7 +104,6 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#1E1E1E",
     marginBottom: "20px",
     borderRadius: 12,
-    position: "relative",
   },
   header: { color: "#999999" },
   cell: { flex: 1, padding: 8, textAlign: "center", color: "white" },
@@ -135,15 +133,14 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: 8,
   },
   pageIndex: {
-    textAlign: "right",
-    color: "#999999",
+    textAlign: "center",
+    color: "#ffffff",
     fontSize: 12,
   },
   pageIndexContainer: {
     position: "absolute",
     width: "100%",
-    left: -10,
-    bottom: 10,
+    top: -40,
   },
   previousButton: {
     marginRight: "10px",
