@@ -16,7 +16,7 @@ export const useStore = create<Store>((set) => ({
   setData: (newData) => {
     set({ data: newData });
     if (newData.length > 0) {
-      set((state) => ({
+      set(() => ({
         filters: toFilters(newData),
       }));
     }
