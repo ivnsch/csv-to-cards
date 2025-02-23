@@ -3,10 +3,12 @@ import "./App.css";
 import UploadCsv from "./UploadCsv";
 import SelectCols from "./SelectCols";
 import PagerScreen from "./pager";
+import { TopBar } from "./topbar";
 
 function App() {
   return (
     <>
+      <TopBar />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<UploadCsv />} />
