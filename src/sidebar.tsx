@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-export const SideBar = () => {
+export const SideBar = ({ isOpen }: { isOpen: boolean }) => {
   const navigate = useNavigate();
 
   return (
-    <div style={styles.sideBar}>
+    <div style={{ ...styles.sideBar, left: isOpen ? "0" : "-220px" }}>
       <SideEntry text="Load CSV" onClick={() => navigate("/")} />
       <SideEntry text="Columns" onClick={() => navigate("/select-cols")} />
       <SideEntry text="Cards" onClick={() => navigate("/pager")} />
@@ -32,7 +32,7 @@ const styles: Record<string, React.CSSProperties> = {
     top: 0,
     left: 0,
     bottom: 0,
-    width: 200,
+    width: "200px",
     height: "100%",
     backgroundColor: "black",
     display: "flex",
@@ -41,6 +41,8 @@ const styles: Record<string, React.CSSProperties> = {
     borderRight: "0.5px solid gray",
     paddingTop: 100,
     paddingLeft: 20,
+    transition: "left 0.3s ease-in-out",
+    zIndex: 2,
   },
   entry: {
     marginBottom: 20,

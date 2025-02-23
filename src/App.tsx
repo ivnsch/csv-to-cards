@@ -5,13 +5,19 @@ import SelectCols from "./SelectCols";
 import PagerScreen from "./pager";
 import { TopBar } from "./topbar";
 import { SideBar } from "./sidebar";
+import { useState } from "react";
 
 function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   return (
     <>
       <BrowserRouter>
-        <SideBar />
-        <TopBar />
+        <SideBar isOpen={isSidebarOpen} />
+        <TopBar
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
         <Routes>
           <Route path="/" element={<UploadCsv />} />
           <Route path="/select-cols" element={<SelectCols />} />

@@ -2,7 +2,13 @@ import { useEffect } from "react";
 import { loadCSV, loadFilters, MyCsv } from "./db";
 import { useStore } from "./store";
 
-export const TopBar = () => {
+export const TopBar = ({
+  isSidebarOpen,
+  setIsSidebarOpen,
+}: {
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
+}) => {
   const setData = useStore((state) => state.setData);
   const data = useStore((state) => state.data);
   const setFilters = useStore((state) => state.setFilters);
@@ -24,7 +30,16 @@ export const TopBar = () => {
     setFromCsv();
   }, [setData, setFilters]);
 
-  return <div style={styles.topBar}>{title(data)}</div>;
+  return (
+    <div style={styles.topBar}>
+      <img
+        style={styles.menuImg}
+        src="/menu_button.svg"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
+      {title(data)}
+    </div>
+  );
 };
 
 const title = (data: MyCsv | null): string => {
@@ -46,5 +61,15 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     fontSize: "18px",
     borderBottom: "0.5px solid gray",
+    zIndex: 3,
+  },
+  menuImg: {
+    width: 30,
+    height: 50,
+    position: "absolute",
+    left: 0,
+    marginLeft: 20,
+    backgroundColor: "none",
+    cursor: "pointer",
   },
 };
