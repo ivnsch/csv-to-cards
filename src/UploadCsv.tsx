@@ -6,7 +6,6 @@ import { MyCsv, saveCSV } from "./db";
 
 function UploadCsv() {
   const setData = useStore((state) => state.setData);
-  const data = useStore((state) => state.data);
 
   const navigate = useNavigate();
 
