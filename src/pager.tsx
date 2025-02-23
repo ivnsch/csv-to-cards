@@ -8,8 +8,9 @@ export default function PagerScreen() {
   const [index, setIndex] = useState(0);
 
   const nextCard = useCallback(() => {
-    setIndex((prev) => (prev < data.length - 1 ? prev + 1 : prev));
-  }, [data.length]);
+    if (!data?.rows) return;
+    setIndex((prev) => (prev < data.rows.length - 1 ? prev + 1 : prev));
+  }, [data]);
 
   const prevCard = useCallback(() => {
     setIndex((prev) => (prev > 0 ? prev - 1 : prev));
@@ -26,27 +27,29 @@ export default function PagerScreen() {
 
   return (
     <div style={styles.container}>
-      <div>
+      {data && (
         <div>
-          <Page
-            key={index}
-            content={data[index]}
-            index={index}
-            filters={filters}
-            pageCount={data.length}
-          />
+          <div>
+            <Page
+              key={index}
+              content={data.rows[index]}
+              index={index}
+              filters={filters}
+              pageCount={data.rows.length}
+            />
+          </div>
+          <button
+            style={styles.previousButton}
+            onClick={prevCard}
+            disabled={index === 0}
+          >
+            Previous
+          </button>
+          <button onClick={nextCard} disabled={index === data.rows.length - 1}>
+            Next
+          </button>
         </div>
-        <button
-          style={styles.previousButton}
-          onClick={prevCard}
-          disabled={index === 0}
-        >
-          Previous
-        </button>
-        <button onClick={nextCard} disabled={index === data.length - 1}>
-          Next
-        </button>
-      </div>
+      )}
     </div>
   );
 }
