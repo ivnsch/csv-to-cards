@@ -9,7 +9,7 @@ function SelectCols() {
 
   return (
     <div>
-      <div>Select columns to show</div>
+      <div style={styles.label}>Select columns to show</div>
       {Object.keys(filters).map((header) => (
         <FilterRow
           key={header}
@@ -51,8 +51,11 @@ const FilterRow = ({
 export default SelectCols;
 
 const styles = {
+  label: {
+    marginBottom: "20px",
+  },
   container: {
-    flex: 1,
+    display: "flex",
     alignItems: "center",
     marginTop: 100,
   },
@@ -62,7 +65,7 @@ const styles = {
     fontSize: 20,
   },
   filter: {
-    flex: 1,
+    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -70,7 +73,7 @@ const styles = {
     marginBottom: 20,
   },
   containerInScrollView: {
-    flex: 1,
+    display: "flex",
     flexDirection: "column",
     paddingBottom: 5,
     alignItems: "flex-start",
@@ -80,7 +83,7 @@ const styles = {
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    marginStart: 10,
+    marginLeft: 10,
     fontSize: 20,
   },
   row: {
@@ -90,6 +93,7 @@ const styles = {
     borderColor: "#333",
   },
   checkbox: {
+    display: "flex",
     width: 30,
     height: 30,
     borderWidth: 1,
