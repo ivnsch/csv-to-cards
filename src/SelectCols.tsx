@@ -8,8 +8,6 @@ function SelectCols() {
   const toggleFilter = useStore((state) => state.toggleFilter);
   const navigate = useNavigate();
 
-  const data = useStore((state) => state.data);
-
   return (
     <div>
       <div style={styles.label}>Select columns to show</div>

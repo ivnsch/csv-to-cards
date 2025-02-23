@@ -39,5 +39,6 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     fontWeight: "bold",
     fontSize: "18px",
+    borderBottom: "0.5px solid gray",
   },
 };

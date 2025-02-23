@@ -4,12 +4,14 @@ import UploadCsv from "./UploadCsv";
 import SelectCols from "./SelectCols";
 import PagerScreen from "./pager";
 import { TopBar } from "./topbar";
+import { SideBar } from "./sidebar";
 
 function App() {
   return (
     <>
-      <TopBar />
       <BrowserRouter>
+        <SideBar />
+        <TopBar />
         <Routes>
           <Route path="/" element={<UploadCsv />} />
           <Route path="/select-cols" element={<SelectCols />} />
