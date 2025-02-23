@@ -19,14 +19,22 @@ export const loadCSV = async (): Promise<MyCsv | null> => {
 
 export const saveFilters = async (data: Filters) => {
   const db = await dbPromise;
-  console.log("db is aving filters: " + JSON.stringify(data));
-
   await db.put("csvData", data, "filters");
 };
 
 export const loadFilters = async (): Promise<Filters | null> => {
   const db = await dbPromise;
   return (await db.get("csvData", "filters")) || null;
+};
+
+export const savePage = async (page: number) => {
+  const db = await dbPromise;
+  await db.put("csvData", page, "page");
+};
+
+export const loadPage = async (): Promise<number | null> => {
+  const db = await dbPromise;
+  return (await db.get("csvData", "page")) || null;
 };
 
 export class MyCsv {

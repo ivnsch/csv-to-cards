@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { CsvRow, Filters, useStore } from "./store";
+import { loadPage, savePage } from "./db";
 
 export default function PagerScreen() {
   const data = useStore((state) => state.data);
@@ -7,14 +8,33 @@ export default function PagerScreen() {
 
   const [index, setIndex] = useState(0);
 
+  // load index if saved
+  useEffect(() => {
+    const initPage = async () => {
+      const savedPage = await loadPage();
+      if (savedPage) {
+        setIndex(savedPage);
+      }
+    };
+    initPage();
+  }, []);
+
+  const setIndexAndSave = useCallback((updater: (prev: number) => number) => {
+    setIndex((prev) => {
+      const newIndex = updater(prev);
+      savePage(newIndex);
+      return newIndex;
+    });
+  }, []);
+
   const nextCard = useCallback(() => {
     if (!data?.rows) return;
-    setIndex((prev) => (prev < data.rows.length - 1 ? prev + 1 : prev));
-  }, [data]);
+    setIndexAndSave((prev) => (prev < data.rows.length - 1 ? prev + 1 : prev));
+  }, [data, setIndexAndSave]);
 
   const prevCard = useCallback(() => {
-    setIndex((prev) => (prev > 0 ? prev - 1 : prev));
-  }, []);
+    setIndexAndSave((prev) => (prev > 0 ? prev - 1 : prev));
+  }, [setIndexAndSave]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
