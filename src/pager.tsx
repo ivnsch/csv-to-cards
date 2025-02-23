@@ -106,7 +106,7 @@ const Page = ({
 const PageEntry = ({ entry }: { entry: [string, string] }) => {
   const [key, value] = entry;
   return (
-    <div style={{ flexDirection: "column", marginBottom: 5 }}>
+    <div style={styles.entry}>
       <div style={styles.header}>{key}</div>
       <div style={styles.value}>{value}</div>
     </div>
@@ -164,5 +164,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   previousButton: {
     marginRight: "10px",
+  },
+  entry: {
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: 5,
+    alignItems: "flex-start",
   },
 };
