@@ -1,12 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { useStore } from "./store";
+import { saveFilters } from "./db";
 
 function SelectCols() {
   const filters = useStore((state) => state.filters);
 
   const toggleFilter = useStore((state) => state.toggleFilter);
   const navigate = useNavigate();
+
+  const toggleFilterAndSave = (header: string) => {
+    toggleFilter(header);
+
+    const updatedFilters = useStore.getState().filters;
+    saveFilters(updatedFilters);
+  };
 
   return (
     <div>
@@ -16,7 +24,7 @@ function SelectCols() {
           key={header}
           header={header}
           filters={filters}
-          toggleFilter={toggleFilter}
+          toggleFilter={toggleFilterAndSave}
         />
       ))}
       <button

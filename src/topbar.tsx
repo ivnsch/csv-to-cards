@@ -1,21 +1,28 @@
 import { useEffect } from "react";
-import { loadCSV, MyCsv } from "./db";
+import { loadCSV, loadFilters, MyCsv } from "./db";
 import { useStore } from "./store";
 
 export const TopBar = () => {
   const setData = useStore((state) => state.setData);
   const data = useStore((state) => state.data);
+  const setFilters = useStore((state) => state.setFilters);
 
-  // load existing file if there's any
+  // load existing csv and filters if there's any
   useEffect(() => {
     const setFromCsv = async () => {
-      const saved = await loadCSV();
-      if (saved) {
-        setData(saved);
+      const savedCsv = await loadCSV();
+      if (savedCsv) {
+        setData(savedCsv);
+      }
+      const savedFilters = await loadFilters();
+      console.log("loading saved filters: " + JSON.stringify(savedFilters));
+
+      if (savedFilters) {
+        setFilters(savedFilters);
       }
     };
     setFromCsv();
-  }, [setData]);
+  }, [setData, setFilters]);
 
   return <div style={styles.topBar}>{title(data)}</div>;
 };

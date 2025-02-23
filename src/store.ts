@@ -8,6 +8,7 @@ type Store = {
   data: MyCsv | null;
   filters: Filters;
   setData: (newData: MyCsv) => void;
+  setFilters: (newFilters: Filters) => void;
   toggleFilter: (header: string) => void;
 };
 
@@ -22,6 +23,10 @@ export const useStore = create<Store>((set) => ({
       }));
     }
   },
+  setFilters: (newFilters) => {
+    set({ filters: newFilters });
+  },
+
   toggleFilter: (header) =>
     set((state) => ({
       filters: { ...state.filters, [header]: !state.filters[header] },
