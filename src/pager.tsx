@@ -70,6 +70,7 @@ export default function PagerScreen() {
               key={index}
               content={data.rows[index]}
               index={index}
+              setIndex={setIndex}
               filters={filters}
               pageCount={data.rows.length}
               showHeaders={showHeaders}
@@ -96,6 +97,7 @@ export default function PagerScreen() {
 const Page = ({
   content,
   index,
+  setIndex,
   filters,
   pageCount,
   showHeaders,
@@ -104,6 +106,7 @@ const Page = ({
 }: {
   content: CsvRow;
   index: number;
+  setIndex: (index: number) => void;
   filters: Filters;
   pageCount: number;
   showHeaders: boolean;
@@ -112,7 +115,12 @@ const Page = ({
 }) => {
   return (
     <div style={styles.page}>
-      <PageTopbar index={index} pageCount={pageCount} onShare={onShare} />
+      <PageTopbar
+        index={index}
+        setIndex={setIndex}
+        pageCount={pageCount}
+        onShare={onShare}
+      />
       <div style={styles.card} ref={cardRef}>
         {Object.entries(content)
           .filter(([key, _]) => filters[key])
@@ -257,16 +265,22 @@ const EditableValue = ({
 
 const PageTopbar = ({
   index,
+  setIndex,
   pageCount,
   onShare,
 }: {
   index: number;
+  setIndex: (index: number) => void;
   pageCount: number;
   onShare: () => void;
 }) => {
   return (
     <div style={styles.pageTopBar}>
-      <CurrentPageIndicator index={index} pageCount={pageCount} />
+      <CurrentPageIndicator
+        index={index}
+        setIndex={setIndex}
+        pageCount={pageCount}
+      />
       <CameraButton onShare={onShare} />
     </div>
   );
@@ -274,14 +288,46 @@ const PageTopbar = ({
 
 const CurrentPageIndicator = ({
   index,
+  setIndex,
   pageCount,
 }: {
   index: number;
+  setIndex: (index: number) => void;
   pageCount: number;
 }) => {
+  const pageNumber = index + 1;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [tmpPageNumber, setTmpPageNumber] = useState(`${pageNumber}`);
+
   return (
     <div style={styles.pageIndex}>
-      {index + 1} / {pageCount}
+      {isEditing ? (
+        <input
+          type="text"
+          value={tmpPageNumber}
+          autoFocus
+          onChange={(e) => setTmpPageNumber(e.target.value)}
+          onBlur={() => setIsEditing(false)}
+          style={styles.editPageInput}
+          onKeyDown={(e) => {
+            if (e.key === "Escape" || e.key === "Enter") {
+              setIsEditing(false);
+              if (e.key === "Enter") {
+                const res = parseInt(tmpPageNumber);
+                if (res) {
+                  setIndex(res - 1);
+                }
+              }
+            }
+          }}
+        />
+      ) : (
+        <span style={{ cursor: "pointer" }} onClick={() => setIsEditing(true)}>
+          {pageNumber}
+        </span>
+      )}
+      <span> / {pageCount} </span>
     </div>
   );
 };
@@ -320,6 +366,16 @@ const baseValue: React.CSSProperties = {
   color: "#EAEAEA",
   fontSize: 24,
   whiteSpace: "pre-line",
+};
+
+const editInputBase: React.CSSProperties = {
+  border: "none",
+  borderBottom: "1px solid white",
+  outline: "none",
+  background: "transparent",
+  color: "white",
+  padding: "5px 0",
+  fontSize: "16px",
 };
 
 const styles: Record<string, React.CSSProperties> = {
@@ -420,12 +476,10 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "flex-start",
   },
   editInput: {
-    border: "none",
-    borderBottom: "1px solid white",
-    outline: "none",
-    background: "transparent",
-    color: "white",
-    padding: "5px 0",
-    fontSize: "16px",
+    ...editInputBase,
+  },
+  editPageInput: {
+    ...editInputBase,
+    width: 30,
   },
 };
