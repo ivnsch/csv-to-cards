@@ -1,6 +1,6 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { CsvRow, Filters, useStore } from "./store";
-import { loadPage, savePage } from "./db";
+import { loadPage, saveCSV, savePage } from "./db";
 import html2canvas from "html2canvas";
 
 export default function PagerScreen() {
@@ -214,12 +214,16 @@ const EditableValue = ({
   column: string;
 }) => {
   const cell = useStore((state) => state.cell);
+  const data = useStore((state) => state.data);
   const updateCell = useStore((state) => state.updateCell);
 
   const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (newValue: string) => {
     updateCell(index, column, newValue);
+    if (data) {
+      saveCSV(data);
+    }
   };
 
   const value = (): string => {
