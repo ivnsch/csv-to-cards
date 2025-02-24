@@ -170,13 +170,7 @@ const copyToClipboard = (text: string) => {
 };
 
 const Value = ({ value }: { value: string }) => {
-  return isImageUrl(value) ? (
-    <ImageValue src={value} />
-  ) : isValidUrl(value) ? (
-    <LinkValue href={value} />
-  ) : (
-    <PlainTextValue text={value} />
-  );
+  return <PlainTextValue text={value} />;
 };
 
 const ImageValue = ({ src }: { src: string }) => {
