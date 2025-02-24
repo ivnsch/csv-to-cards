@@ -3,15 +3,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 export const SideBar = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div style={{ ...styles.sideBar, left: isOpen ? "0" : "-220px" }}>
-      <SideEntry text="Load CSV" path="/" />
-      <SideEntry text="Settings" path="/card-settings" />
-      <SideEntry text="Columns" path="/select-cols" />
-      <SideEntry text="Cards" path="/pager" />
+      <SideEntry text="Load CSV" image="/upload.svg" path="/" />
+      <SideEntry text="Settings" image="/gear.svg" path="/card-settings" />
+      <SideEntry text="Columns" image="/columns.svg" path="/select-cols" />
+      <SideEntry text="Cards" image="card.svg" path="/pager" />
     </div>
   );
 };
 
-const SideEntry = ({ text, path }: { text: string; path: string }) => {
+const SideEntry = ({
+  text,
+  path,
+  image,
+}: {
+  text: string;
+  path: string;
+  image: string;
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,6 +27,7 @@ const SideEntry = ({ text, path }: { text: string; path: string }) => {
     <SideEntryInternal
       text={text}
       highlighted={location.pathname === path}
+      image={image}
       onClick={() => navigate(path)}
     />
   );
@@ -27,21 +36,26 @@ const SideEntry = ({ text, path }: { text: string; path: string }) => {
 const SideEntryInternal = ({
   text,
   highlighted,
+  image,
   onClick,
 }: {
   text: string;
   highlighted: boolean;
+  image: string;
   onClick: () => void;
 }) => {
   return (
-    <div
-      style={{
-        ...styles.entry,
-        fontWeight: highlighted ? "bold" : "normal",
-      }}
-      onClick={onClick}
-    >
-      {text}
+    <div style={styles.entryContainer}>
+      <img src={image} style={styles.entryImg} />
+      <div
+        style={{
+          ...styles.entry,
+          fontWeight: highlighted ? "bold" : "normal",
+        }}
+        onClick={onClick}
+      >
+        {text}
+      </div>
     </div>
   );
 };
@@ -64,8 +78,20 @@ const styles: Record<string, React.CSSProperties> = {
     transition: "left 0.3s ease-in-out",
     zIndex: 2,
   },
-  entry: {
+  entryContainer: {
+    display: "flex",
+    alignItems: "center",
     marginBottom: 20,
+    gap: "8px",
+  },
+  entryImg: {
+    width: 25,
+    height: 25,
+    verticalAlign: "middle",
+    display: "inline-block",
+    marginBottom: 4,
+  },
+  entry: {
     cursor: "pointer",
   },
 };
