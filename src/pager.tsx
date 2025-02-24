@@ -50,10 +50,7 @@ export default function PagerScreen() {
   }, [nextCard, prevCard]);
 
   const captureScreenshot = async () => {
-    console.log("???");
-
     if (!cardRef.current) return;
-    console.log("!!!");
 
     const canvas = await html2canvas(cardRef.current);
     const image = canvas.toDataURL("image/png");
