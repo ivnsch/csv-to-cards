@@ -34,7 +34,7 @@ function CardSettingsView() {
           navigate("/select-cols");
         }}
       >
-        Cards
+        Select columns
       </button>
     </div>
   );

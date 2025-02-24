@@ -33,7 +33,7 @@ function SelectCols() {
           navigate("/pager");
         }}
       >
-        Cards
+        Show cards
       </button>
     </div>
   );
