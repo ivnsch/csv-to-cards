@@ -240,6 +240,11 @@ const EditableValue = ({
           onChange={(e) => handleChange(e.target.value)}
           onBlur={() => setIsEditing(false)}
           style={styles.editInput}
+          onKeyDown={(e) => {
+            if (e.key === "Escape" || e.key === "Enter") {
+              setIsEditing(false);
+            }
+          }}
         />
       ) : (
         <span onClick={() => setIsEditing(true)} style={styles.value}>
