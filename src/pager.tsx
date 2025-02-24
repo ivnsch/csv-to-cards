@@ -138,14 +138,18 @@ const PageEntry = ({
   return (
     <div style={styles.entry}>
       {showKey && <div style={styles.header}>{key}</div>}
-      {isImageUrl(value) ? (
-        <ImageValue src={value} />
-      ) : isValidUrl(value) ? (
-        <LinkValue href={value} />
-      ) : (
-        <PlainTextValue text={value} />
-      )}
+      <Value value={value} />
     </div>
+  );
+};
+
+const Value = ({ value }: { value: string }) => {
+  return isImageUrl(value) ? (
+    <ImageValue src={value} />
+  ) : isValidUrl(value) ? (
+    <LinkValue href={value} />
+  ) : (
+    <PlainTextValue text={value} />
   );
 };
 
@@ -186,22 +190,40 @@ const PageTopbar = ({
 }) => {
   return (
     <div style={styles.pageTopBar}>
-      <div style={styles.pageIndex}>
-        {index + 1} / {pageCount}
-      </div>
-      <div
-        style={styles.shareIcon}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.backgroundImage =
-            "url('camera_button_white.svg')")
-        }
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.backgroundImage =
-            "url('camera_button_grey.svg')")
-        }
-        onClick={() => onShare()}
-      />
+      <CurrentPageIndicator index={index} pageCount={pageCount} />
+      <CameraButton onShare={onShare} />
     </div>
+  );
+};
+
+const CurrentPageIndicator = ({
+  index,
+  pageCount,
+}: {
+  index: number;
+  pageCount: number;
+}) => {
+  return (
+    <div style={styles.pageIndex}>
+      {index + 1} / {pageCount}
+    </div>
+  );
+};
+
+const CameraButton = ({ onShare }: { onShare: () => void }) => {
+  return (
+    <div
+      style={styles.shareIcon}
+      onMouseEnter={(e) =>
+        (e.currentTarget.style.backgroundImage =
+          "url('camera_button_white.svg')")
+      }
+      onMouseLeave={(e) =>
+        (e.currentTarget.style.backgroundImage =
+          "url('camera_button_grey.svg')")
+      }
+      onClick={() => onShare()}
+    />
   );
 };
 
