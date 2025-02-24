@@ -1,11 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { CsvRow, Filters, useStore } from "./store";
 import { loadPage, savePage } from "./db";
+import html2canvas from "html2canvas";
 
 export default function PagerScreen() {
   const data = useStore((state) => state.data);
   const filters = useStore((state) => state.filters);
   const showHeaders = useStore((state) => state.cardSettings.showHeaders);
+
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const [index, setIndex] = useState(0);
 
@@ -46,6 +49,21 @@ export default function PagerScreen() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [nextCard, prevCard]);
 
+  const captureScreenshot = async () => {
+    console.log("???");
+
+    if (!cardRef.current) return;
+    console.log("!!!");
+
+    const canvas = await html2canvas(cardRef.current);
+    const image = canvas.toDataURL("image/png");
+
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = "screenshot.png";
+    link.click();
+  };
+
   return (
     <div style={styles.container}>
       {data && (
@@ -58,6 +76,8 @@ export default function PagerScreen() {
               filters={filters}
               pageCount={data.rows.length}
               showHeaders={showHeaders}
+              cardRef={cardRef}
+              onShare={captureScreenshot}
             />
           </div>
           <button
@@ -82,12 +102,16 @@ const Page = ({
   filters,
   pageCount,
   showHeaders,
+  cardRef,
+  onShare,
 }: {
   content: CsvRow;
   index: number;
   filters: Filters;
   pageCount: number;
   showHeaders: boolean;
+  cardRef: RefObject<HTMLDivElement | null>;
+  onShare: () => void;
 }) => {
   return (
     <div style={styles.page}>
@@ -99,15 +123,16 @@ const Page = ({
           style={styles.shareIcon}
           onMouseEnter={(e) =>
             (e.currentTarget.style.backgroundImage =
-              "url('share_button_white.svg')")
+              "url('camera_button_white.svg')")
           }
           onMouseLeave={(e) =>
             (e.currentTarget.style.backgroundImage =
-              "url('share_button_grey.svg')")
+              "url('camera_button_grey.svg')")
           }
+          onClick={() => onShare()}
         />
       </div>
-      <div style={styles.card}>
+      <div style={styles.card} ref={cardRef}>
         {Object.entries(content)
           .filter(([key, _]) => filters[key])
           .map((entry) => (
@@ -180,7 +205,7 @@ const styles: Record<string, React.CSSProperties> = {
     height: 30,
     marginLeft: "auto",
     cursor: "pointer",
-    backgroundImage: "url('/share_button_grey.svg')",
+    backgroundImage: "url('/camera_button_grey.svg')",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
@@ -190,6 +215,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: 20,
     marginBottom: "20px",
     borderLeft: "0.5px solid white",
+    backgroundColor: "black",
   },
   header: { color: "#999999" },
   cell: { flex: 1, padding: 8, textAlign: "center", color: "white" },
