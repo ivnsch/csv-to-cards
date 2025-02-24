@@ -9,6 +9,10 @@ function UploadCsv() {
 
   const navigate = useNavigate();
 
+  const triggerFileInput = () => {
+    document.getElementById("fileUpload")?.click();
+  };
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -37,10 +41,36 @@ function UploadCsv() {
   };
 
   return (
-    <div>
-      <input type="file" accept=".csv" onChange={handleFileUpload} />
+    <div style={styles.container}>
+      <input
+        type="file"
+        accept=".csv"
+        onChange={handleFileUpload}
+        id="fileUpload"
+        style={styles.input}
+      />
+      <button
+        type="button"
+        onClick={triggerFileInput}
+        style={styles.customButton}
+      >
+        Upload CSV
+      </button>
     </div>
   );
 }
 
 export default UploadCsv;
+
+const styles: Record<string, React.CSSProperties> = {
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "50px",
+    width: "100%",
+  },
+  input: {
+    display: "none",
+  },
+};
