@@ -91,10 +91,21 @@ const Page = ({
 }) => {
   return (
     <div style={styles.page}>
-      <div style={styles.pageIndexContainer}>
+      <div style={styles.pageTopBar}>
         <div style={styles.pageIndex}>
           {index + 1} / {pageCount}
         </div>
+        <div
+          style={styles.shareIcon}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.backgroundImage =
+              "url('share_button_white.svg')")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.backgroundImage =
+              "url('share_button_grey.svg')")
+          }
+        />
       </div>
       <div style={styles.card}>
         {Object.entries(content)
@@ -164,6 +175,16 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     position: "relative",
   },
+  shareIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: "auto",
+    cursor: "pointer",
+    backgroundImage: "url('/share_button_grey.svg')",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+  },
   card: {
     width: "90%",
     padding: 20,
@@ -204,13 +225,15 @@ const styles: Record<string, React.CSSProperties> = {
   },
   pageIndex: {
     textAlign: "center",
-    color: "#ffffff",
-    fontSize: 12,
+    color: "#999999",
+    fontSize: 14,
   },
-  pageIndexContainer: {
+  pageTopBar: {
+    display: "flex",
     position: "absolute",
     width: "100%",
     top: -40,
+    alignItems: "flex-end",
   },
   previousButton: {
     marginRight: "10px",
