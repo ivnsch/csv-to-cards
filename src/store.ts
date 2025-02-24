@@ -11,16 +11,21 @@ type Store = {
   data: MyCsv | null;
   filters: Filters;
   cardSettings: CardSettings;
+  cell: (rowIndex: number, column: string) => string;
   setData: (newData: MyCsv) => void;
   setFilters: (newFilters: Filters) => void;
   toggleFilter: (header: string) => void;
   toggleShowHeaders: () => void;
+  updateCell: (rowIndex: number, column: string, newValue: string) => void;
 };
 
 export const useStore = create<Store>((set) => ({
   data: null,
   filters: {},
   cardSettings: new CardSettings(true),
+  cell: (rowIndex: number, column: string): string => {
+    return useStore.getState().data?.rows[rowIndex]?.[column] ?? "";
+  },
   setData: (newData) => {
     set({ data: newData });
     if (newData) {
@@ -45,6 +50,19 @@ export const useStore = create<Store>((set) => ({
         showHeaders: !state.cardSettings.showHeaders,
       },
     })),
+
+  updateCell: (rowIndex, column, newValue) =>
+    set((state) => {
+      if (!state.data) return state;
+
+      const updatedRows = state.data.rows.map((row, i) =>
+        i === rowIndex ? { ...row, [column]: newValue } : row
+      );
+
+      return {
+        data: new MyCsv(state.data.name, updatedRows),
+      };
+    }),
 }));
 
 const toFilters = (data: CsvRow[]): Filters => {

@@ -117,7 +117,12 @@ const Page = ({
         {Object.entries(content)
           .filter(([key, _]) => filters[key])
           .map((entry) => (
-            <PageEntry key={entry[0]} entry={entry} showKey={showHeaders} />
+            <PageEntry
+              index={index}
+              key={entry[0]}
+              entry={entry}
+              showKey={showHeaders}
+            />
           ))}
       </div>
     </div>
@@ -125,9 +130,11 @@ const Page = ({
 };
 
 const PageEntry = ({
+  index,
   entry,
   showKey,
 }: {
+  index: number;
   entry: [string, string];
   showKey: boolean;
 }) => {
@@ -136,7 +143,7 @@ const PageEntry = ({
     <div style={styles.entry}>
       {showKey && <div style={styles.header}>{key}</div>}
       <div style={styles.valueRow}>
-        <Value value={value} />
+        <Value index={index} column={key} />
         <CopyButton value={value} />
       </div>
     </div>
@@ -169,8 +176,8 @@ const copyToClipboard = (text: string) => {
     });
 };
 
-const Value = ({ value }: { value: string }) => {
-  return <PlainTextValue text={value} />;
+const Value = ({ index, column }: { index: number; column: string }) => {
+  return <EditableValue index={index} column={column} />;
 };
 
 const ImageValue = ({ src }: { src: string }) => {
@@ -197,6 +204,46 @@ const LinkValue = ({ href }: { href: string }) => {
 
 const PlainTextValue = ({ text }: { text: string }) => {
   return <div style={styles.value}>{text}</div>;
+};
+
+const EditableValue = ({
+  index,
+  column,
+}: {
+  index: number;
+  column: string;
+}) => {
+  const cell = useStore((state) => state.cell);
+  const updateCell = useStore((state) => state.updateCell);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleChange = (newValue: string) => {
+    updateCell(index, column, newValue);
+  };
+
+  const value = (): string => {
+    console.log("getting cell for index: " + index + ", column: " + column);
+    return cell(index, column);
+  };
+
+  return (
+    <div>
+      {isEditing ? (
+        <input
+          type="text"
+          value={value()}
+          autoFocus
+          onChange={(e) => handleChange(e.target.value)}
+          onBlur={() => setIsEditing(false)}
+        />
+      ) : (
+        <span onClick={() => setIsEditing(true)} style={styles.value}>
+          {value()}
+        </span>
+      )}
+    </div>
+  );
 };
 
 const PageTopbar = ({
@@ -310,6 +357,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   value: {
     ...baseValue,
+    cursor: "pointer",
   },
   valueRow: {
     display: "flex",
