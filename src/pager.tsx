@@ -138,9 +138,38 @@ const PageEntry = ({
   return (
     <div style={styles.entry}>
       {showKey && <div style={styles.header}>{key}</div>}
-      <Value value={value} />
+      <div style={styles.valueRow}>
+        <Value value={value} />
+        <CopyButton value={value} />
+      </div>
     </div>
   );
+};
+
+const CopyButton = ({ value }: { value: string }) => {
+  return (
+    <div
+      style={styles.copyIcon}
+      onMouseEnter={(e) =>
+        (e.currentTarget.style.backgroundImage = "url('copy_white.svg')")
+      }
+      onMouseLeave={(e) =>
+        (e.currentTarget.style.backgroundImage = "url('copy_grey.svg')")
+      }
+      onClick={() => copyToClipboard(value)}
+    />
+  );
+};
+
+const copyToClipboard = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      console.log("Copied to clipboard:", text);
+    })
+    .catch((err) => {
+      console.error("Failed to copy:", err);
+    });
 };
 
 const Value = ({ value }: { value: string }) => {
@@ -243,7 +272,6 @@ const isImageUrl = (url: string): boolean => {
 const baseValue: React.CSSProperties = {
   color: "#EAEAEA",
   fontSize: 24,
-  marginBottom: 10,
   whiteSpace: "pre-line",
 };
 
@@ -261,6 +289,17 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
+  },
+  copyIcon: {
+    width: 25,
+    height: 25,
+    cursor: "pointer",
+    backgroundImage: "url('/copy_grey.svg')",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    marginLeft: 10,
+    marginBottom: 6,
   },
   card: {
     width: "90%",
@@ -280,6 +319,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   value: {
     ...baseValue,
+  },
+  valueRow: {
+    display: "flex",
+    alignItems: "flex-end",
+    marginBottom: 10,
   },
   imageText: {
     ...baseValue,
