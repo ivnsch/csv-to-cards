@@ -6,6 +6,7 @@ import PagerScreen from "./pager";
 import { TopBar } from "./topbar";
 import { SideBar } from "./sidebar";
 import { useState } from "react";
+import CardSettingsView from "./card_settings";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -20,6 +21,7 @@ function App() {
         />
         <Routes>
           <Route path="/" element={<UploadCsv />} />
+          <Route path="/card-settings" element={<CardSettingsView />} />
           <Route path="/select-cols" element={<SelectCols />} />
           <Route path="/pager" element={<PagerScreen />} />
         </Routes>

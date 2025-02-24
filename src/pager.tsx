@@ -5,6 +5,7 @@ import { loadPage, savePage } from "./db";
 export default function PagerScreen() {
   const data = useStore((state) => state.data);
   const filters = useStore((state) => state.filters);
+  const showHeaders = useStore((state) => state.cardSettings.showHeaders);
 
   const [index, setIndex] = useState(0);
 
@@ -56,6 +57,7 @@ export default function PagerScreen() {
               index={index}
               filters={filters}
               pageCount={data.rows.length}
+              showHeaders={showHeaders}
             />
           </div>
           <button
@@ -79,11 +81,13 @@ const Page = ({
   index,
   filters,
   pageCount,
+  showHeaders,
 }: {
   content: CsvRow;
   index: number;
   filters: Filters;
   pageCount: number;
+  showHeaders: boolean;
 }) => {
   return (
     <div style={styles.page}>
@@ -96,18 +100,24 @@ const Page = ({
         {Object.entries(content)
           .filter(([key, _]) => filters[key])
           .map((entry) => (
-            <PageEntry key={entry[0]} entry={entry} />
+            <PageEntry key={entry[0]} entry={entry} showKey={showHeaders} />
           ))}
       </div>
     </div>
   );
 };
 
-const PageEntry = ({ entry }: { entry: [string, string] }) => {
+const PageEntry = ({
+  entry,
+  showKey,
+}: {
+  entry: [string, string];
+  showKey: boolean;
+}) => {
   const [key, value] = entry;
   return (
     <div style={styles.entry}>
-      <div style={styles.header}>{key}</div>
+      {showKey && <div style={styles.header}>{key}</div>}
       {isImageUrl(value) ? (
         <div style={styles.imageContainer}>
           <img src={value} alt="Loaded content" style={styles.image} />

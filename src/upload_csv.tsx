@@ -2,14 +2,7 @@ import "./App.css";
 import * as Papa from "papaparse";
 import { CsvRow, useStore } from "./store";
 import { useNavigate } from "react-router-dom";
-import {
-  deleteFilters,
-  deletePage,
-  MyCsv,
-  saveCSV,
-  saveFilters,
-  savePage,
-} from "./db";
+import { deleteFilters, deletePage, MyCsv, saveCSV } from "./db";
 
 function UploadCsv() {
   const setData = useStore((state) => state.setData);
@@ -38,7 +31,7 @@ function UploadCsv() {
         deleteFilters();
         deletePage();
 
-        navigate("/select-cols");
+        navigate("/card-settings");
       },
     });
   };

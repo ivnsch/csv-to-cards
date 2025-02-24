@@ -6,6 +6,7 @@ export const SideBar = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div style={{ ...styles.sideBar, left: isOpen ? "0" : "-220px" }}>
       <SideEntry text="Load CSV" onClick={() => navigate("/")} />
+      <SideEntry text="Settings" onClick={() => navigate("/card-settings")} />
       <SideEntry text="Columns" onClick={() => navigate("/select-cols")} />
       <SideEntry text="Cards" onClick={() => navigate("/pager")} />
     </div>
