@@ -231,8 +231,8 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative",
   },
   shareIcon: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     marginLeft: "auto",
     cursor: "pointer",
     backgroundImage: "url('/camera_button_grey.svg')",
