@@ -239,6 +239,7 @@ const EditableValue = ({
           autoFocus
           onChange={(e) => handleChange(e.target.value)}
           onBlur={() => setIsEditing(false)}
+          style={styles.editInput}
         />
       ) : (
         <span onClick={() => setIsEditing(true)} style={styles.value}>
@@ -412,5 +413,14 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+  },
+  editInput: {
+    border: "none",
+    borderBottom: "1px solid white",
+    outline: "none",
+    background: "transparent",
+    color: "white",
+    padding: "5px 0",
+    fontSize: "16px",
   },
 };
