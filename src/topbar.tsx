@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { loadCSV, loadFilters, MyCsv } from "./db";
-import { useStore } from "./store";
+import { CsvRow, useStore } from "./store";
 
 export const TopBar = ({
   isSidebarOpen,
@@ -30,6 +30,12 @@ export const TopBar = ({
     setFromCsv();
   }, [setData, setFilters]);
 
+  const downloadCsv = () => {
+    if (data) {
+      downloadAsCSV(data);
+    }
+  };
+
   return (
     <div style={styles.topBar}>
       <img
@@ -38,6 +44,13 @@ export const TopBar = ({
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       />
       {title(data)}
+      {data && (
+        <img
+          style={styles.downloadImg}
+          src="/download_white.svg"
+          onClick={() => downloadCsv()}
+        />
+      )}
     </div>
   );
 };
@@ -65,11 +78,63 @@ const styles: Record<string, React.CSSProperties> = {
   },
   menuImg: {
     width: 30,
-    height: 50,
+    height: 30,
     position: "absolute",
     left: 0,
     marginLeft: 20,
     backgroundColor: "none",
     cursor: "pointer",
   },
+  downloadImg: {
+    width: 30,
+    height: 30,
+    right: 0,
+    marginRight: 20,
+    backgroundColor: "none",
+    cursor: "pointer",
+    position: "absolute",
+  },
+};
+
+const downloadAsCSV = (data: MyCsv) => {
+  const csvString = toString(data.rows);
+  triggerDownload(data.name, csvString);
+};
+
+const toString = (rows: CsvRow[]): string => {
+  if (rows.length === 0) return "";
+
+  const headers = Object.keys(rows[0]);
+
+  return [
+    headers.join(","),
+    ...rows.map((row) => headers.map((h) => escapeNewlines(row[h])).join(",")),
+  ].join("\n");
+};
+
+const triggerDownload = (fileName: string, csvString: string) => {
+  const url = toBlobUrl(csvString);
+  clickFakeLinkToDownloadUrl(fileName, url);
+};
+
+const toBlobUrl = (csvString: string): string => {
+  const blob = new Blob([csvString], { type: "text/csv" });
+  return URL.createObjectURL(blob);
+};
+
+const clickFakeLinkToDownloadUrl = (fileName: string, url: string) => {
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${fileName}`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+// if we don't do this, multiple lines inside cells will appear as new rows
+const escapeNewlines = (value: string) => {
+  if (value.includes("\n")) {
+    return `"${value}"`;
+  }
+  return value;
 };
