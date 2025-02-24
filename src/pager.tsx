@@ -139,24 +139,40 @@ const PageEntry = ({
     <div style={styles.entry}>
       {showKey && <div style={styles.header}>{key}</div>}
       {isImageUrl(value) ? (
-        <div style={styles.imageContainer}>
-          <img src={value} alt="Loaded content" style={styles.image} />
-          <div style={styles.imageText}>{value}</div>
-        </div>
+        <ImageValue src={value} />
       ) : isValidUrl(value) ? (
-        <a
-          href={value}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={styles.valueLink}
-        >
-          {value}
-        </a>
+        <LinkValue href={value} />
       ) : (
-        <div style={styles.value}>{value}</div>
+        <PlainTextValue text={value} />
       )}
     </div>
   );
+};
+
+const ImageValue = ({ src }: { src: string }) => {
+  return (
+    <div style={styles.imageContainer}>
+      <img src={src} alt="Loaded content" style={styles.image} />
+      <div style={styles.imageText}>{src}</div>
+    </div>
+  );
+};
+
+const LinkValue = ({ href }: { href: string }) => {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={styles.valueLink}
+    >
+      {href}
+    </a>
+  );
+};
+
+const PlainTextValue = ({ text }: { text: string }) => {
+  return <div style={styles.value}>{text}</div>;
 };
 
 const PageTopbar = ({
