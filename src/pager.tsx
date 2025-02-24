@@ -214,20 +214,19 @@ const EditableValue = ({
   column: string;
 }) => {
   const cell = useStore((state) => state.cell);
-  const data = useStore((state) => state.data);
   const updateCell = useStore((state) => state.updateCell);
 
   const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (newValue: string) => {
     updateCell(index, column, newValue);
-    if (data) {
-      saveCSV(data);
+    const latestData = useStore.getState().data;
+    if (latestData) {
+      saveCSV(latestData);
     }
   };
 
   const value = (): string => {
-    console.log("getting cell for index: " + index + ", column: " + column);
     return cell(index, column);
   };
 
