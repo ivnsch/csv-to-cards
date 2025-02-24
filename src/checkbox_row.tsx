@@ -41,5 +41,5 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
   },
-  checkmark: { color: "#BB86FC", fontSize: 20 },
+  checkmark: { color: "white", fontSize: 20 },
 };
