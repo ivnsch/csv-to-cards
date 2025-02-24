@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import UploadCsv from "./UploadCsv";
-import SelectCols from "./SelectCols";
+import UploadCsv from "./upload_csv";
+import SelectCols from "./select_cols";
 import PagerScreen from "./pager";
 import { TopBar } from "./topbar";
 import { SideBar } from "./sidebar";
