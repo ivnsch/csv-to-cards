@@ -115,23 +115,7 @@ const Page = ({
 }) => {
   return (
     <div style={styles.page}>
-      <div style={styles.pageTopBar}>
-        <div style={styles.pageIndex}>
-          {index + 1} / {pageCount}
-        </div>
-        <div
-          style={styles.shareIcon}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundImage =
-              "url('camera_button_white.svg')")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundImage =
-              "url('camera_button_grey.svg')")
-          }
-          onClick={() => onShare()}
-        />
-      </div>
+      <PageTopbar index={index} pageCount={pageCount} onShare={onShare} />
       <div style={styles.card} ref={cardRef}>
         {Object.entries(content)
           .filter(([key, _]) => filters[key])
@@ -171,6 +155,36 @@ const PageEntry = ({
       ) : (
         <div style={styles.value}>{value}</div>
       )}
+    </div>
+  );
+};
+
+const PageTopbar = ({
+  index,
+  pageCount,
+  onShare,
+}: {
+  index: number;
+  pageCount: number;
+  onShare: () => void;
+}) => {
+  return (
+    <div style={styles.pageTopBar}>
+      <div style={styles.pageIndex}>
+        {index + 1} / {pageCount}
+      </div>
+      <div
+        style={styles.shareIcon}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.backgroundImage =
+            "url('camera_button_white.svg')")
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.backgroundImage =
+            "url('camera_button_grey.svg')")
+        }
+        onClick={() => onShare()}
+      />
     </div>
   );
 };
