@@ -3,7 +3,9 @@ import { useStore } from "./store";
 export const RightBar = () => {
   const data = useStore((state) => state.data);
   const cardIndex = useStore((state) => state.cardIndex);
-  const isDone = useStore((state) => state.isDone);
+  const done = useStore((state) => state.done);
+
+  const isDone = (rowIndex: number) => done[rowIndex] ?? false;
 
   return (
     <div style={styles.rightBar}>

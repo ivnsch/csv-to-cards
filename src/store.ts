@@ -18,7 +18,6 @@ type Store = {
   toggleShowHeaders: () => void;
   updateCell: (rowIndex: number, column: string, newValue: string) => void;
   done: boolean[];
-  isDone: (rowIndex: number) => boolean;
   setDone: (done: boolean[]) => void;
   toggleDone: (rowIndex: number) => void;
   cardIndex: number;
@@ -73,10 +72,6 @@ export const useStore = create<Store>((set, get) => ({
       };
     }),
 
-  isDone: (rowIndex): boolean => {
-    const done = get().done;
-    return rowIndex < done.length ? done[rowIndex] : false;
-  },
   setDone: (newDone) => {
     set({ done: newDone });
   },
