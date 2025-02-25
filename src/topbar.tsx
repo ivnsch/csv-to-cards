@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { loadCSV, loadDone, loadFilters, MyCsv } from "./db";
+import { loadCSV, loadDone, loadFilters, loadPage, MyCsv } from "./db";
 import { CsvRow, useStore } from "./store";
 
 // TODO move loading of db data to root component, like App
@@ -15,6 +15,7 @@ export const TopBar = ({
   const data = useStore((state) => state.data);
   const setFilters = useStore((state) => state.setFilters);
   const setDone = useStore((state) => state.setDone);
+  const setCardIndex = useStore((state) => state.setCardIndex);
 
   // load db data into zusand
   useEffect(() => {
@@ -32,9 +33,14 @@ export const TopBar = ({
       if (savedDone) {
         setDone(savedDone);
       }
+
+      const cardIndex = await loadPage();
+      if (cardIndex) {
+        setCardIndex(cardIndex);
+      }
     };
     setFromCsv();
-  }, [setData, setFilters, setDone]);
+  }, [setData, setFilters, setDone, setCardIndex]);
 
   const downloadCsv = () => {
     if (data) {
