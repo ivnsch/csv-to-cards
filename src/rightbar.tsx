@@ -1,3 +1,4 @@
+import { savePage } from "./db";
 import { useStore } from "./store";
 
 export const RightBar = () => {
@@ -8,6 +9,11 @@ export const RightBar = () => {
 
   const isDone = (rowIndex: number) => done[rowIndex] ?? false;
 
+  const setIndexAndSave = (index: number) => {
+    setCardIndex(index);
+    savePage(index);
+  };
+
   return (
     <div style={styles.rightBar}>
       {data &&
@@ -17,7 +23,7 @@ export const RightBar = () => {
             index={index}
             highlighted={index == cardIndex}
             done={isDone(index)}
-            onClick={() => setCardIndex(index)}
+            onClick={() => setIndexAndSave(index)}
           />
         ))}
     </div>
