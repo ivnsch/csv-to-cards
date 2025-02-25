@@ -64,6 +64,7 @@ const styles: Record<string, React.CSSProperties> = {
     overflowX: "hidden",
     maxHeight: "calc(100vh - 300px)",
     marginBottom: 50,
+    paddingRight: 30,
   },
   label: {
     marginBottom: "20px",
