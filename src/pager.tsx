@@ -59,7 +59,9 @@ export default function PagerScreen() {
   const captureScreenshot = async () => {
     if (!cardRef.current) return;
 
-    const canvas = await html2canvas(cardRef.current);
+    const canvas = await html2canvas(cardRef.current, {
+      ignoreElements: (el) => el.id === "copy-icon",
+    });
     const image = canvas.toDataURL("image/png");
 
     const link = document.createElement("a");
@@ -212,6 +214,7 @@ const DefaultPageEntry = ({
 const CopyButton = ({ value }: { value: string }) => {
   return (
     <div
+      id="copy-icon"
       style={styles.copyIcon}
       onMouseEnter={(e) =>
         (e.currentTarget.style.backgroundImage = "url('copy_white.svg')")
