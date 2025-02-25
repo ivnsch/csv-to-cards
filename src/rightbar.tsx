@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { savePage } from "./db";
 import { useStore } from "./store";
 
@@ -7,6 +8,8 @@ export const RightBar = () => {
   const setCardIndex = useStore((state) => state.setCardIndex);
   const done = useStore((state) => state.done);
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const isDone = (rowIndex: number) => done[rowIndex] ?? false;
 
   const setIndexAndSave = (index: number) => {
@@ -14,8 +17,20 @@ export const RightBar = () => {
     savePage(index);
   };
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const element = containerRef.current.children[cardIndex] as HTMLElement;
+    if (element) {
+      containerRef.current.scrollTo({
+        top: element.offsetTop,
+        behavior: "smooth",
+      });
+    }
+  }, [cardIndex]);
+
   return (
-    <div style={styles.rightBar}>
+    <div ref={containerRef} style={styles.rightBar}>
       {data &&
         data.rows.map((_, index) => (
           <RowEntry
