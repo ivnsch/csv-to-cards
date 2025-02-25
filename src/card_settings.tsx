@@ -29,6 +29,7 @@ function CardSettingsView() {
         isChecked={() => settings.showHeaders}
         toggleCheckbox={() => toggleShowHeadersAndSave()}
       />
+
       <button
         onClick={() => {
           navigate("/select-cols");

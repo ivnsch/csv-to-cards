@@ -1,5 +1,5 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
-import { CsvRow, Filters, useStore } from "./store";
+import { CsvRow, Filters, parseCustomLayout, useStore } from "./store";
 import { loadPage, saveCSV, saveDone, savePage } from "./db";
 import html2canvas from "html2canvas";
 import GlobalEnterListener from "./global_enter_listener";
@@ -12,6 +12,7 @@ export default function PagerScreen() {
   const done = useStore((state) => state.done);
   const index = useStore((state) => state.cardIndex);
   const setIndex = useStore((state) => state.setCardIndex);
+  const customLayout = useStore((state) => state.customLayout);
 
   const isDone = (rowIndex: number) => done[rowIndex] ?? false;
 
@@ -93,6 +94,7 @@ export default function PagerScreen() {
               cardRef={cardRef}
               onShare={captureScreenshot}
               isDone={isDone(index)}
+              customLayout={customLayout}
             />
           </div>
           <button
@@ -121,6 +123,7 @@ const Page = ({
   cardRef,
   onShare,
   isDone,
+  customLayout,
 }: {
   content: CsvRow;
   index: number;
@@ -131,7 +134,10 @@ const Page = ({
   cardRef: RefObject<HTMLDivElement | null>;
   onShare: () => void;
   isDone: boolean;
+  customLayout: string;
 }) => {
+  const customRows = parseCustomLayout(customLayout, content);
+
   const pageStyle = {
     ...styles.page,
     ...(isDone ? styles.cardGreenLeftBorder : styles.cardWhiteLeftBorder),
@@ -146,22 +152,42 @@ const Page = ({
         onShare={onShare}
       />
       <div style={styles.card} ref={cardRef}>
-        {Object.entries(content)
-          .filter(([key, _]) => filters[key])
-          .map((entry) => (
-            <PageEntry
-              index={index}
-              key={entry[0]}
-              entry={entry}
-              showKey={showHeaders}
-            />
-          ))}
+        {customRows ? (
+          <CustomLayoutPageEntry rows={customRows} />
+        ) : (
+          Object.entries(content)
+            .filter(([key, _]) => filters[key])
+            .map((entry) => (
+              <DefaultPageEntry
+                index={index}
+                key={entry[0]}
+                entry={entry}
+                showKey={showHeaders}
+              />
+            ))
+        )}
       </div>
     </div>
   );
 };
 
-const PageEntry = ({
+const CustomLayoutPageEntry = ({ rows }: { rows: string[][] }) => {
+  return (
+    <div>
+      {rows.map((row, rowIndex) => (
+        <div key={rowIndex} style={styles.customRow}>
+          {row.map((cell, colIndex) => (
+            <div key={colIndex} style={styles.value}>
+              {cell}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const DefaultPageEntry = ({
   index,
   entry,
   showKey,
@@ -515,5 +541,9 @@ const styles: Record<string, React.CSSProperties> = {
   editPageInput: {
     ...editInputBase,
     width: 30,
+  },
+  customRow: {
+    display: "flex",
+    gap: "10px",
   },
 };

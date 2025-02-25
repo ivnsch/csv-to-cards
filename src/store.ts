@@ -22,6 +22,8 @@ type Store = {
   toggleDone: (rowIndex: number) => void;
   cardIndex: number;
   setCardIndex: (index: number) => void;
+  customLayout: string;
+  setCustomLayout: (layout: string) => void;
 };
 
 export const useStore = create<Store>((set, get) => ({
@@ -29,6 +31,7 @@ export const useStore = create<Store>((set, get) => ({
   filters: {},
   done: [],
   cardIndex: 0,
+  customLayout: "",
 
   cardSettings: new CardSettings(true),
   cell: (rowIndex: number, column: string): string => {
@@ -88,8 +91,24 @@ export const useStore = create<Store>((set, get) => ({
     set(() => ({
       cardIndex: index,
     })),
+
+  setCustomLayout: (layout: string) => set({ customLayout: layout }),
 }));
 
 const toFilters = (data: MyCsv): Filters => {
   return Object.fromEntries(data.headers.map((header) => [header, true]));
+};
+
+// returns rows with respectively array of values corresponding to column names
+export const parseCustomLayout = (
+  layout: string,
+  rowData: CsvRow
+): string[][] | null => {
+  const str = layout.trim();
+  if (str.length == 0) {
+    return null;
+  }
+  return str
+    .split("\n")
+    .map((row) => row.split(" ").map((col) => rowData[col] || ""));
 };

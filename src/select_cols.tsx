@@ -6,6 +6,8 @@ import { CheckboxRow } from "./checkbox_row";
 
 function SelectCols() {
   const filters = useStore((state) => state.filters);
+  const setCustomLayout = useStore((state) => state.setCustomLayout);
+  const customLayout = useStore((state) => state.customLayout);
 
   const toggleFilter = useStore((state) => state.toggleFilter);
   const navigate = useNavigate();
@@ -28,6 +30,13 @@ function SelectCols() {
           toggleCheckbox={toggleFilterAndSave}
         />
       ))}
+      <div style={styles.label}>Custom layout</div>
+      <textarea
+        placeholder="Enter custom format"
+        onChange={(e) => setCustomLayout(e.target.value)}
+        value={customLayout}
+        style={styles.textarea}
+      />
       <button
         onClick={() => {
           navigate("/pager");
@@ -68,5 +77,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   startButton: {
     bottom: 50,
+  },
+  textarea: {
+    width: "100%",
+    height: 100,
+    background: "transparent",
+    padding: 10,
   },
 };
