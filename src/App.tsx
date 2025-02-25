@@ -7,6 +7,7 @@ import { TopBar } from "./topbar";
 import { SideBar } from "./sidebar";
 import { useState } from "react";
 import CardSettingsView from "./card_settings";
+import { RightBar } from "./rightbar";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -15,6 +16,7 @@ function App() {
     <>
       <BrowserRouter>
         <SideBar isOpen={isSidebarOpen} />
+        <RightBar />
         <TopBar
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
