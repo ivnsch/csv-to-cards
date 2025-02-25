@@ -421,7 +421,6 @@ const styles: Record<string, React.CSSProperties> = {
     maxHeight: "calc(100vh - 300px)",
     marginTop: "200px",
     marginBottom: "100px",
-    minWidth: 300,
   },
   shareIcon: {
     width: 25,
