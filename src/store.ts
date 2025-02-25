@@ -21,6 +21,8 @@ type Store = {
   isDone: (rowIndex: number) => boolean;
   setDone: (done: boolean[]) => void;
   toggleDone: (rowIndex: number) => void;
+  cardIndex: number;
+  setCardIndex: (index: number) => void;
 };
 
 export const useStore = create<Store>((set, get) => ({
@@ -84,6 +86,12 @@ export const useStore = create<Store>((set, get) => ({
 
       return { done: updatedDone };
     }),
+
+  cardIndex: 0,
+  setCardIndex: (index: number) =>
+    set(() => ({
+      cardIndex: index,
+    })),
 }));
 
 const toFilters = (data: CsvRow[]): Filters => {

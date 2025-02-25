@@ -10,11 +10,12 @@ export default function PagerScreen() {
   const showHeaders = useStore((state) => state.cardSettings.showHeaders);
   const toggleDone = useStore((state) => state.toggleDone);
   const done = useStore((state) => state.done);
+  const index = useStore((state) => state.cardIndex);
+  const setIndex = useStore((state) => state.setCardIndex);
+
   const isDone = (rowIndex: number) => done[rowIndex] ?? false;
 
   const cardRef = useRef<HTMLDivElement>(null);
-
-  const [index, setIndex] = useState(0);
 
   // load index if saved
   useEffect(() => {
@@ -25,15 +26,16 @@ export default function PagerScreen() {
       }
     };
     initPage();
-  }, []);
+  }, [setIndex]);
 
-  const setIndexAndSave = useCallback((updater: (prev: number) => number) => {
-    setIndex((prev) => {
-      const newIndex = updater(prev);
+  const setIndexAndSave = useCallback(
+    (updater: (prev: number) => number) => {
+      const newIndex = updater(useStore.getState().cardIndex);
+      setIndex(newIndex);
       savePage(newIndex);
-      return newIndex;
-    });
-  }, []);
+    },
+    [setIndex]
+  );
 
   const nextCard = useCallback(() => {
     if (!data?.rows) return;
