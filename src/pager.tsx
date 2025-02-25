@@ -249,23 +249,6 @@ const ImageValue = ({ src }: { src: string }) => {
   );
 };
 
-const LinkValue = ({ href }: { href: string }) => {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={styles.valueLink}
-    >
-      {href}
-    </a>
-  );
-};
-
-const PlainTextValue = ({ text }: { text: string }) => {
-  return <div style={styles.value}>{text}</div>;
-};
-
 const EditableValue = ({
   index,
   column,
@@ -399,15 +382,6 @@ const CameraButton = ({ onShare }: { onShare: () => void }) => {
       onClick={() => onShare()}
     />
   );
-};
-
-const isValidUrl = (text: string): boolean => {
-  try {
-    new URL(text);
-    return true;
-  } catch (_) {
-    return false;
-  }
 };
 
 const isImageUrl = (url: string): boolean => {

@@ -26,7 +26,7 @@ type Store = {
   setCustomLayout: (layout: string) => void;
 };
 
-export const useStore = create<Store>((set, get) => ({
+export const useStore = create<Store>((set) => ({
   data: null,
   filters: {},
   done: [],
