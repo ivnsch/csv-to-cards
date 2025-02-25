@@ -2,17 +2,39 @@ import { useStore } from "./store";
 
 export const RightBar = () => {
   const data = useStore((state) => state.data);
+  const cardIndex = useStore((state) => state.cardIndex);
 
   return (
     <div style={styles.rightBar}>
       {data &&
-        data.rows.map((_, index) => <RowEntry key={index} index={index} />)}
+        data.rows.map((_, index) => (
+          <RowEntry
+            key={index}
+            index={index}
+            highlighted={index == cardIndex}
+          />
+        ))}
     </div>
   );
 };
 
-const RowEntry = ({ index }: { index: number }) => {
-  return <div style={styles.entry}>{index}</div>;
+const RowEntry = ({
+  index,
+  highlighted,
+}: {
+  index: number;
+  highlighted: boolean;
+}) => {
+  return (
+    <div
+      style={{
+        ...styles.entry,
+        fontWeight: highlighted ? "bold" : "normal",
+      }}
+    >
+      {index}
+    </div>
+  );
 };
 
 const styles: Record<string, React.CSSProperties> = {
