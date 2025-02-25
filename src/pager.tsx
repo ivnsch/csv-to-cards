@@ -99,16 +99,21 @@ export default function PagerScreen() {
               customLayout={customLayout}
             />
           </div>
-          <button
-            style={styles.previousButton}
-            onClick={prevCard}
-            disabled={index === 0}
-          >
-            Previous
-          </button>
-          <button onClick={nextCard} disabled={index === data.rows.length - 1}>
-            Next
-          </button>
+          <div style={styles.buttonsContainer}>
+            <button
+              style={styles.previousButton}
+              onClick={prevCard}
+              disabled={index === 0}
+            >
+              Previous
+            </button>
+            <button
+              onClick={nextCard}
+              disabled={index === data.rows.length - 1}
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -411,6 +416,12 @@ const styles: Record<string, React.CSSProperties> = {
   page: {
     display: "flex",
     position: "relative",
+    overflowY: "auto",
+    overflowX: "hidden",
+    maxHeight: "calc(100vh - 300px)",
+    marginTop: "200px",
+    marginBottom: "100px",
+    minWidth: 300,
   },
   shareIcon: {
     width: 25,
@@ -522,5 +533,8 @@ const styles: Record<string, React.CSSProperties> = {
   customRow: {
     display: "flex",
     gap: "10px",
+  },
+  buttonsContainer: {
+    marginBottom: 100,
   },
 };
