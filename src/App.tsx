@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import UploadCsv from "./upload_csv";
 import SelectCols from "./select_cols";
@@ -10,24 +10,24 @@ import CardSettingsView from "./card_settings";
 import { RightBar } from "./rightbar";
 
 function App() {
+  const location = useLocation();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <>
-      <BrowserRouter>
-        <SideBar isOpen={isSidebarOpen} />
-        <RightBar />
-        <TopBar
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-        <Routes>
-          <Route path="/" element={<UploadCsv />} />
-          <Route path="/card-settings" element={<CardSettingsView />} />
-          <Route path="/select-cols" element={<SelectCols />} />
-          <Route path="/pager" element={<PagerScreen />} />
-        </Routes>
-      </BrowserRouter>
+      <SideBar isOpen={isSidebarOpen} />
+      {location.pathname === "/pager" && <RightBar />}
+      <TopBar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
+      <Routes>
+        <Route path="/" element={<UploadCsv />} />
+        <Route path="/card-settings" element={<CardSettingsView />} />
+        <Route path="/select-cols" element={<SelectCols />} />
+        <Route path="/pager" element={<PagerScreen />} />
+      </Routes>
     </>
   );
 }
