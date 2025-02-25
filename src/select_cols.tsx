@@ -21,22 +21,25 @@ function SelectCols() {
 
   return (
     <div style={styles.container}>
-      <div style={styles.label}>Select columns to show</div>
-      {Object.keys(filters).map((header) => (
-        <CheckboxRow
-          key={header}
-          value={header}
-          isChecked={(value) => filters[value]}
-          toggleCheckbox={toggleFilterAndSave}
+      <div style={styles.scrollContainer}>
+        <div style={styles.label}>Select columns to show</div>
+        {Object.keys(filters).map((header) => (
+          <CheckboxRow
+            key={header}
+            value={header}
+            isChecked={(value) => filters[value]}
+            toggleCheckbox={toggleFilterAndSave}
+          />
+        ))}
+        <div style={styles.label}>Custom layout</div>
+        <textarea
+          placeholder="Enter custom format"
+          onChange={(e) => setCustomLayout(e.target.value)}
+          value={customLayout}
+          style={styles.textarea}
         />
-      ))}
-      <div style={styles.label}>Custom layout</div>
-      <textarea
-        placeholder="Enter custom format"
-        onChange={(e) => setCustomLayout(e.target.value)}
-        value={customLayout}
-        style={styles.textarea}
-      />
+      </div>
+
       <button
         onClick={() => {
           navigate("/pager");
@@ -55,6 +58,12 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+  },
+  scrollContainer: {
+    overflowY: "auto",
+    overflowX: "hidden",
+    maxHeight: "calc(100vh - 300px)",
+    marginBottom: 50,
   },
   label: {
     marginBottom: "20px",
