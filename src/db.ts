@@ -76,5 +76,9 @@ export const deleteDone = async () => {
 };
 
 export class MyCsv {
-  constructor(public name: string, public rows: CsvRow[]) {}
+  constructor(
+    public name: string,
+    public headers: string[],
+    public rows: CsvRow[]
+  ) {}
 }

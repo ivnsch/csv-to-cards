@@ -48,10 +48,9 @@ function UploadCsv() {
       skipEmptyLines: true,
       complete: (result: Papa.ParseResult<CsvRow>) => {
         const csvEntries = result.data;
+        const headers = result.meta.fields || [];
 
-        console.log(csvEntries);
-
-        const csv = new MyCsv(file.name, csvEntries);
+        const csv = new MyCsv(file.name, headers, csvEntries);
 
         clearAllState();
 

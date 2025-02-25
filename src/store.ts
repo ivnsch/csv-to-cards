@@ -39,7 +39,7 @@ export const useStore = create<Store>((set, get) => ({
     set({ data: newData });
     if (newData) {
       set(() => ({
-        filters: toFilters(newData.rows),
+        filters: toFilters(newData),
       }));
     }
   },
@@ -69,7 +69,7 @@ export const useStore = create<Store>((set, get) => ({
       );
 
       return {
-        data: new MyCsv(state.data.name, updatedRows),
+        data: new MyCsv(state.data.name, state.data.headers, updatedRows),
       };
     }),
 
@@ -95,7 +95,6 @@ export const useStore = create<Store>((set, get) => ({
     })),
 }));
 
-const toFilters = (data: CsvRow[]): Filters => {
-  const headers = Object.keys(data[0]);
-  return Object.fromEntries(headers.map((header) => [header, true]));
+const toFilters = (data: MyCsv): Filters => {
+  return Object.fromEntries(data.headers.map((header) => [header, true]));
 };
