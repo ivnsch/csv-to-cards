@@ -89,8 +89,8 @@ const styles: Record<string, React.CSSProperties> = {
     zIndex: 3,
   },
   menuImg: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     position: "absolute",
     left: 0,
     marginLeft: 20,
@@ -98,8 +98,8 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: "pointer",
   },
   downloadImg: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     right: 0,
     marginRight: 20,
     backgroundColor: "none",
