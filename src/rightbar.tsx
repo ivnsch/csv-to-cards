@@ -67,9 +67,11 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    paddingTop: 60,
+    marginTop: 60,
     zIndex: 2,
     borderLeft: "0.5px solid gray",
+    overflowY: "auto",
+    overflowX: "hidden",
   },
   entry: {
     width: "100%",
