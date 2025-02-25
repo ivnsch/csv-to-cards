@@ -32,7 +32,7 @@ const RowEntry = ({
         fontWeight: highlighted ? "bold" : "normal",
       }}
     >
-      {index}
+      {index + 1}
     </div>
   );
 };
