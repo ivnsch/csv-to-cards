@@ -416,9 +416,6 @@ const styles: Record<string, React.CSSProperties> = {
   page: {
     display: "flex",
     position: "relative",
-    overflowY: "auto",
-    overflowX: "hidden",
-    maxHeight: "calc(100vh - 300px)",
     marginTop: "200px",
     marginBottom: "100px",
   },
@@ -446,8 +443,10 @@ const styles: Record<string, React.CSSProperties> = {
   card: {
     width: "100%",
     padding: 20,
-    marginBottom: "20px",
     backgroundColor: "black",
+    overflowY: "auto",
+    overflowX: "hidden",
+    maxHeight: "calc(100vh - 300px)",
   },
   cardWhiteLeftBorder: {
     borderLeft: "0.5px solid white",
