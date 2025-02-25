@@ -12,7 +12,7 @@ type Store = {
   filters: Filters;
   cardSettings: CardSettings;
   cell: (rowIndex: number, column: string) => string;
-  setData: (newData: MyCsv) => void;
+  setData: (newData: MyCsv | null) => void;
   setFilters: (newFilters: Filters) => void;
   toggleFilter: (header: string) => void;
   toggleShowHeaders: () => void;
@@ -28,6 +28,9 @@ type Store = {
 export const useStore = create<Store>((set, get) => ({
   data: null,
   filters: {},
+  done: [],
+  cardIndex: 0,
+
   cardSettings: new CardSettings(true),
   cell: (rowIndex: number, column: string): string => {
     return useStore.getState().data?.rows[rowIndex]?.[column] ?? "";
@@ -70,7 +73,6 @@ export const useStore = create<Store>((set, get) => ({
       };
     }),
 
-  done: [],
   isDone: (rowIndex): boolean => {
     const done = get().done;
     return rowIndex < done.length ? done[rowIndex] : false;
@@ -87,7 +89,6 @@ export const useStore = create<Store>((set, get) => ({
       return { done: updatedDone };
     }),
 
-  cardIndex: 0,
   setCardIndex: (index: number) =>
     set(() => ({
       cardIndex: index,

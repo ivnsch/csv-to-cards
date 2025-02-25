@@ -17,6 +17,11 @@ export const loadCSV = async (): Promise<MyCsv | null> => {
   return (await db.get("csvData", "csv")) || null;
 };
 
+export const deleteCSV = async () => {
+  const db = await dbPromise;
+  await db.delete("csvData", "csv");
+};
+
 export const saveFilters = async (data: Filters) => {
   const db = await dbPromise;
   await db.put("csvData", data, "filters");

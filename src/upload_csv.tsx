@@ -2,15 +2,39 @@ import "./App.css";
 import * as Papa from "papaparse";
 import { CsvRow, useStore } from "./store";
 import { useNavigate } from "react-router-dom";
-import { deleteDone, deleteFilters, deletePage, MyCsv, saveCSV } from "./db";
+import {
+  deleteCSV,
+  deleteDone,
+  deleteFilters,
+  deletePage,
+  MyCsv,
+  saveCSV,
+} from "./db";
 
 function UploadCsv() {
   const setData = useStore((state) => state.setData);
+  const setFilters = useStore((state) => state.setFilters);
+  const setDone = useStore((state) => state.setDone);
+  const setCardIndex = useStore((state) => state.setCardIndex);
 
   const navigate = useNavigate();
 
   const triggerFileInput = () => {
     document.getElementById("fileUpload")?.click();
+  };
+
+  const clearAllState = () => {
+    // zustand
+    setData(null);
+    setFilters({});
+    setCardIndex(0);
+    setDone([]);
+
+    // storage
+    deleteCSV();
+    deleteFilters();
+    deletePage();
+    deleteDone();
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,12 +53,10 @@ function UploadCsv() {
 
         const csv = new MyCsv(file.name, csvEntries);
 
-        setData(csv);
+        clearAllState();
 
+        setData(csv);
         saveCSV(csv);
-        deleteFilters();
-        deletePage();
-        deleteDone();
 
         navigate("/card-settings");
       },
