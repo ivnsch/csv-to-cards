@@ -39,12 +39,35 @@ export const savePage = async (page: number) => {
 
 export const loadPage = async (): Promise<number | null> => {
   const db = await dbPromise;
-  return (await db.get("csvData", "page")) || null;
+  const res = db.get("csvData", "page");
+  if (res == undefined) {
+    return null;
+  }
+  return res;
 };
 
 export const deletePage = async () => {
   const db = await dbPromise;
   await db.delete("csvData", "page");
+};
+
+export const saveDone = async (done: boolean[]) => {
+  const db = await dbPromise;
+  await db.put("csvData", done, "done");
+};
+
+export const loadDone = async (): Promise<boolean[] | null> => {
+  const db = await dbPromise;
+  const res = db.get("csvData", "done");
+  if (res == undefined) {
+    return null;
+  }
+  return res;
+};
+
+export const deleteDone = async () => {
+  const db = await dbPromise;
+  await db.delete("csvData", "done");
 };
 
 export class MyCsv {

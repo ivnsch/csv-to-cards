@@ -1,12 +1,16 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { CsvRow, Filters, useStore } from "./store";
-import { loadPage, saveCSV, savePage } from "./db";
+import { loadPage, saveCSV, saveDone, savePage } from "./db";
 import html2canvas from "html2canvas";
+import GlobalEnterListener from "./global_enter_listener";
 
 export default function PagerScreen() {
   const data = useStore((state) => state.data);
   const filters = useStore((state) => state.filters);
   const showHeaders = useStore((state) => state.cardSettings.showHeaders);
+  const toggleDone = useStore((state) => state.toggleDone);
+  const done = useStore((state) => state.done);
+  const isDone = (rowIndex: number) => done[rowIndex] ?? false;
 
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -16,7 +20,7 @@ export default function PagerScreen() {
   useEffect(() => {
     const initPage = async () => {
       const savedPage = await loadPage();
-      if (savedPage) {
+      if (savedPage != null) {
         setIndex(savedPage);
       }
     };
@@ -61,8 +65,18 @@ export default function PagerScreen() {
     link.click();
   };
 
+  const toggleDoneAndSave = async () => {
+    const savedPage = await loadPage();
+    if (savedPage != null) {
+      toggleDone(savedPage);
+    }
+    const latestDone = useStore.getState().done;
+    saveDone(latestDone);
+  };
+
   return (
     <div style={styles.container}>
+      <GlobalEnterListener onEnter={async () => toggleDoneAndSave()} />
       {data && (
         <div>
           <div>
@@ -76,6 +90,7 @@ export default function PagerScreen() {
               showHeaders={showHeaders}
               cardRef={cardRef}
               onShare={captureScreenshot}
+              isDone={isDone(index)}
             />
           </div>
           <button
@@ -103,6 +118,7 @@ const Page = ({
   showHeaders,
   cardRef,
   onShare,
+  isDone,
 }: {
   content: CsvRow;
   index: number;
@@ -112,9 +128,15 @@ const Page = ({
   showHeaders: boolean;
   cardRef: RefObject<HTMLDivElement | null>;
   onShare: () => void;
+  isDone: boolean;
 }) => {
+  const pageStyle = {
+    ...styles.page,
+    ...(isDone ? styles.cardGreenLeftBorder : styles.cardWhiteLeftBorder),
+  };
+
   return (
-    <div style={styles.page}>
+    <div style={pageStyle}>
       <PageTopbar
         index={index}
         setIndex={setIndex}
@@ -405,11 +427,16 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: 6,
   },
   card: {
-    width: "90%",
+    width: "100%",
     padding: 20,
     marginBottom: "20px",
-    borderLeft: "0.5px solid white",
     backgroundColor: "black",
+  },
+  cardWhiteLeftBorder: {
+    borderLeft: "0.5px solid white",
+  },
+  cardGreenLeftBorder: {
+    borderLeft: "0.5px solid #39FF14",
   },
   header: { color: "#999999" },
   cell: { flex: 1, padding: 8, textAlign: "center", color: "white" },

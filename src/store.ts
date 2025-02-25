@@ -17,9 +17,13 @@ type Store = {
   toggleFilter: (header: string) => void;
   toggleShowHeaders: () => void;
   updateCell: (rowIndex: number, column: string, newValue: string) => void;
+  done: boolean[];
+  isDone: (rowIndex: number) => boolean;
+  setDone: (done: boolean[]) => void;
+  toggleDone: (rowIndex: number) => void;
 };
 
-export const useStore = create<Store>((set) => ({
+export const useStore = create<Store>((set, get) => ({
   data: null,
   filters: {},
   cardSettings: new CardSettings(true),
@@ -62,6 +66,23 @@ export const useStore = create<Store>((set) => ({
       return {
         data: new MyCsv(state.data.name, updatedRows),
       };
+    }),
+
+  done: [],
+  isDone: (rowIndex): boolean => {
+    const done = get().done;
+    return rowIndex < done.length ? done[rowIndex] : false;
+  },
+  setDone: (newDone) => {
+    set({ done: newDone });
+  },
+  toggleDone: (rowIndex) =>
+    set((state) => {
+      const updatedDone = [...state.done];
+      updatedDone[rowIndex] = !updatedDone[rowIndex];
+      console.log("toggled done: " + updatedDone + " for index: " + rowIndex);
+
+      return { done: updatedDone };
     }),
 }));
 

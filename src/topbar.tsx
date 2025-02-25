@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import { loadCSV, loadFilters, MyCsv } from "./db";
+import { loadCSV, loadDone, loadFilters, MyCsv } from "./db";
 import { CsvRow, useStore } from "./store";
 
+// TODO move loading of db data to root component, like App
+// it's functionally ok here since topbar is always shown currently but not quite right
 export const TopBar = ({
   isSidebarOpen,
   setIsSidebarOpen,
@@ -12,8 +14,9 @@ export const TopBar = ({
   const setData = useStore((state) => state.setData);
   const data = useStore((state) => state.data);
   const setFilters = useStore((state) => state.setFilters);
+  const setDone = useStore((state) => state.setDone);
 
-  // load existing csv and filters if there's any
+  // load db data into zusand
   useEffect(() => {
     const setFromCsv = async () => {
       const savedCsv = await loadCSV();
@@ -21,14 +24,17 @@ export const TopBar = ({
         setData(savedCsv);
       }
       const savedFilters = await loadFilters();
-      console.log("loading saved filters: " + JSON.stringify(savedFilters));
-
       if (savedFilters) {
         setFilters(savedFilters);
       }
+
+      const savedDone = await loadDone();
+      if (savedDone) {
+        setDone(savedDone);
+      }
     };
     setFromCsv();
-  }, [setData, setFilters]);
+  }, [setData, setFilters, setDone]);
 
   const downloadCsv = () => {
     if (data) {
