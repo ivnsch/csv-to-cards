@@ -3,6 +3,7 @@ import { useStore } from "./store";
 export const RightBar = () => {
   const data = useStore((state) => state.data);
   const cardIndex = useStore((state) => state.cardIndex);
+  const isDone = useStore((state) => state.isDone);
 
   return (
     <div style={styles.rightBar}>
@@ -12,6 +13,7 @@ export const RightBar = () => {
             key={index}
             index={index}
             highlighted={index == cardIndex}
+            done={isDone(index)}
           />
         ))}
     </div>
@@ -21,14 +23,17 @@ export const RightBar = () => {
 const RowEntry = ({
   index,
   highlighted,
+  done,
 }: {
   index: number;
   highlighted: boolean;
+  done: boolean;
 }) => {
   return (
     <div
       style={{
         ...styles.entry,
+        ...(done && styles.entryDone),
         fontWeight: highlighted ? "bold" : "normal",
       }}
     >
@@ -58,5 +63,8 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "0.5px solid gray",
     paddingLeft: 10,
     textAlign: "start",
+  },
+  entryDone: {
+    borderLeft: "1px solid #39FF14",
   },
 };
