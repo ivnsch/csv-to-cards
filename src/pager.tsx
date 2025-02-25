@@ -174,6 +174,7 @@ const PageEntry = ({
   return (
     <div style={styles.entry}>
       {showKey && <div style={styles.header}>{key}</div>}
+      {isImageUrl(value) && <ImageValue src={value} />}
       <div style={styles.valueRow}>
         <Value index={index} column={key} />
         <CopyButton value={value} />
@@ -215,8 +216,9 @@ const Value = ({ index, column }: { index: number; column: string }) => {
 const ImageValue = ({ src }: { src: string }) => {
   return (
     <div style={styles.imageContainer}>
-      <img src={src} alt="Loaded content" style={styles.image} />
-      <div style={styles.imageText}>{src}</div>
+      <a href={src} target="_blank" rel="noopener noreferrer">
+        <img src={src} alt="Loaded content" style={styles.image} />
+      </a>
     </div>
   );
 };
@@ -503,6 +505,9 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+  },
+  image: {
+    maxHeight: 200,
   },
   editInput: {
     ...editInputBase,
