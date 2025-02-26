@@ -3,6 +3,7 @@ import "./App.css";
 import { useStore } from "./store";
 import { saveFilters } from "./db";
 import { CheckboxRow } from "./checkbox_row";
+import { Tooltip } from "react-tooltip";
 
 function SelectCols() {
   const filters = useStore((state) => state.filters);
@@ -32,7 +33,25 @@ function SelectCols() {
           />
         ))}
         <Separator />
-        <div style={styles.label}>Custom layout</div>
+        <div style={styles.customLayoutRow}>
+          <div style={styles.label}>Custom layout</div>
+          <div
+            data-tooltip-id="help-tooltip"
+            style={styles.helpIcon}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundImage = "url('help_white.svg')")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundImage = "url('help_grey.svg')")
+            }
+          />
+          <Tooltip
+            id="help-tooltip"
+            place="top"
+            content="Enter column names in any order, separated by spaces"
+          />
+        </div>
+
         <textarea
           placeholder="Enter custom format"
           onChange={(e) => setCustomLayout(e.target.value)}
@@ -127,5 +146,21 @@ const styles: Record<string, React.CSSProperties> = {
     height: 100,
     background: "transparent",
     // padding: 10,
+  },
+  customLayoutRow: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "flex-start",
+  },
+  helpIcon: {
+    width: 25,
+    height: 25,
+    marginLeft: "auto",
+    cursor: "pointer",
+    backgroundImage: "url('/help_grey.svg')",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
   },
 };
