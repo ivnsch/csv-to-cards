@@ -22,8 +22,8 @@ type Store = {
   toggleDone: (rowIndex: number) => void;
   cardIndex: number;
   setCardIndex: (index: number) => void;
-  customLayout: string;
-  setCustomLayout: (layout: string) => void;
+  template: string;
+  setTemplate: (layout: string) => void;
 };
 
 export const useStore = create<Store>((set) => ({
@@ -31,7 +31,7 @@ export const useStore = create<Store>((set) => ({
   filters: {},
   done: [],
   cardIndex: 0,
-  customLayout: "",
+  template: "",
 
   cardSettings: new CardSettings(true),
   cell: (rowIndex: number, column: string): string => {
@@ -92,7 +92,7 @@ export const useStore = create<Store>((set) => ({
       cardIndex: index,
     })),
 
-  setCustomLayout: (layout: string) => set({ customLayout: layout }),
+  setTemplate: (layout: string) => set({ template: layout }),
 }));
 
 const toFilters = (data: MyCsv): Filters => {

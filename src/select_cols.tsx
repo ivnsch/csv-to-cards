@@ -7,8 +7,8 @@ import { Tooltip } from "react-tooltip";
 
 function SelectCols() {
   const filters = useStore((state) => state.filters);
-  const setCustomLayout = useStore((state) => state.setCustomLayout);
-  const customLayout = useStore((state) => state.customLayout);
+  const setTemplate = useStore((state) => state.setTemplate);
+  const template = useStore((state) => state.template);
 
   const toggleFilter = useStore((state) => state.toggleFilter);
   const navigate = useNavigate();
@@ -20,8 +20,8 @@ function SelectCols() {
     saveFilters(updatedFilters);
   };
 
-  const saveCustomLayout = async (layout: string) => {
-    setCustomLayout(layout);
+  const saveTemplate = async (layout: string) => {
+    setTemplate(layout);
     await saveTemplate(layout);
   };
 
@@ -38,8 +38,8 @@ function SelectCols() {
           />
         ))}
         <Separator />
-        <div style={styles.customLayoutRow}>
-          <div style={styles.label}>Custom layout</div>
+        <div style={styles.templateRow}>
+          <div style={styles.label}>Template</div>
           <div
             data-tooltip-id="help-tooltip"
             style={styles.helpIcon}
@@ -58,8 +58,8 @@ function SelectCols() {
         </div>
 
         <textarea
-          onChange={(e) => saveCustomLayout(e.target.value)}
-          value={customLayout}
+          onChange={(e) => saveTemplate(e.target.value)}
+          value={template}
           style={styles.textarea}
         />
       </div>
@@ -151,7 +151,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "transparent",
     // padding: 10,
   },
-  customLayoutRow: {
+  templateRow: {
     display: "flex",
     flexDirection: "row",
     width: "100%",

@@ -12,7 +12,7 @@ export default function PagerScreen() {
   const done = useStore((state) => state.done);
   const index = useStore((state) => state.cardIndex);
   const setIndex = useStore((state) => state.setCardIndex);
-  const customLayout = useStore((state) => state.customLayout);
+  const template = useStore((state) => state.template);
 
   const isDone = (rowIndex: number) => done[rowIndex] ?? false;
 
@@ -96,7 +96,7 @@ export default function PagerScreen() {
               cardRef={cardRef}
               onShare={captureScreenshot}
               isDone={isDone(index)}
-              customLayout={customLayout}
+              template={template}
             />
           </div>
           <div style={styles.buttonsContainer}>
@@ -130,7 +130,7 @@ const Page = ({
   cardRef,
   onShare,
   isDone,
-  customLayout,
+  template,
 }: {
   content: CsvRow;
   index: number;
@@ -141,9 +141,9 @@ const Page = ({
   cardRef: RefObject<HTMLDivElement | null>;
   onShare: () => void;
   isDone: boolean;
-  customLayout: string;
+  template: string;
 }) => {
-  const customRows = parseCustomLayout(customLayout, content);
+  const customRows = parseTemplate(template, content);
 
   const pageStyle = {
     ...styles.page,
@@ -160,7 +160,7 @@ const Page = ({
       />
       <div style={styles.card} ref={cardRef}>
         {customRows ? (
-          <CustomLayoutPageEntry rows={customRows} />
+          <TemplatePageEntry rows={customRows} />
         ) : (
           Object.entries(content)
             .filter(([key, _]) => filters[key])
@@ -178,10 +178,7 @@ const Page = ({
   );
 };
 
-const parseCustomLayout = (
-  layout: string,
-  rowData: CsvRow
-): string[][] | null => {
+const parseTemplate = (layout: string, rowData: CsvRow): string[][] | null => {
   if (!layout) return null;
 
   return layout.split("\n").map((line) =>
@@ -197,7 +194,7 @@ const parseCustomLayout = (
   );
 };
 
-const CustomLayoutPageEntry = ({ rows }: { rows: string[][] }) => {
+const TemplatePageEntry = ({ rows }: { rows: string[][] }) => {
   return (
     <div>
       {rows.map((row, rowIndex) => (

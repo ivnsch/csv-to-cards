@@ -23,7 +23,7 @@ export const TopBar = ({
   const setFilters = useStore((state) => state.setFilters);
   const setDone = useStore((state) => state.setDone);
   const setCardIndex = useStore((state) => state.setCardIndex);
-  const setCustomLayout = useStore((state) => state.setCustomLayout);
+  const setTemplate = useStore((state) => state.setTemplate);
 
   // load db data into zusand
   useEffect(() => {
@@ -47,13 +47,13 @@ export const TopBar = ({
         setCardIndex(cardIndex);
       }
 
-      const customLayout = await loadTemplate();
-      if (customLayout) {
-        setCustomLayout(customLayout);
+      const template = await loadTemplate();
+      if (template) {
+        setTemplate(template);
       }
     };
     setFromCsv();
-  }, [setData, setFilters, setDone, setCardIndex, setCustomLayout]);
+  }, [setData, setFilters, setDone, setCardIndex, setTemplate]);
 
   const downloadCsv = () => {
     if (data) {

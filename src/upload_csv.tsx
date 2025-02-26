@@ -26,7 +26,7 @@ function UploadCsv() {
   const setFilters = useStore((state) => state.setFilters);
   const setDone = useStore((state) => state.setDone);
   const setCardIndex = useStore((state) => state.setCardIndex);
-  const setCustomLayout = useStore((state) => state.setCustomLayout);
+  const setTemplate = useStore((state) => state.setTemplate);
 
   //   const [isSignedIn, setIsSignedIn] = useState(false);
   //   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -44,7 +44,7 @@ function UploadCsv() {
     setFilters({});
     setCardIndex(0);
     setDone([]);
-    setCustomLayout("");
+    setTemplate("");
 
     // storage
     deleteCSV();
