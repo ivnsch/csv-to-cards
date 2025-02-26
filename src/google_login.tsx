@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { signIn, signOut, useGoogleAuth } from "./google";
 
-const GoogleLogin = () => {
+const GoogleLogin = ({
+  setAccessToken,
+}: {
+  setAccessToken: (token: string | null) => void;
+}) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
 
   useGoogleAuth(setIsSignedIn);
 

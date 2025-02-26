@@ -4,7 +4,10 @@ import { gapi } from "gapi-script";
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const SCOPES = "https://www.googleapis.com/auth/userinfo.email";
 
-export const useGoogleAuth = (setIsSignedIn: (signedIn: boolean) => void) => {
+export const useGoogleAuth = (
+  setIsSignedIn: (signedIn: boolean) => void,
+  setAccessToken: (token: string) => void
+) => {
   const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,12 +28,22 @@ export const useGoogleAuth = (setIsSignedIn: (signedIn: boolean) => void) => {
         setEmail(user.getBasicProfile().getEmail());
       }
 
+      // set access token
+      const accessToken = authInstance.currentUser
+        .get()
+        .getAuthResponse().access_token;
+      setAccessToken(accessToken);
+
       // listen to changes of signedin status
       authInstance.isSignedIn.listen((signedIn: boolean) => {
         setIsSignedIn(signedIn);
         if (signedIn) {
           const user = authInstance.currentUser.get();
           setEmail(user.getBasicProfile().getEmail());
+          const accessToken = authInstance.currentUser
+            .get()
+            .getAuthResponse().access_token;
+          setAccessToken(accessToken);
         } else {
           setEmail(null);
         }
@@ -38,7 +51,7 @@ export const useGoogleAuth = (setIsSignedIn: (signedIn: boolean) => void) => {
     };
 
     gapi.load("client:auth2", initAuth);
-  }, [setIsSignedIn]);
+  }, [setIsSignedIn, setAccessToken]);
 
   return { email };
 };
@@ -72,4 +85,20 @@ export const signOut = (
   gapi.auth2.getAuthInstance().signOut();
   setIsSignedIn(false);
   setAccessToken(null);
+};
+
+export const fetchSheets = async (accessToken: string): Promise<Sheet[]> => {
+  const response = await fetch(
+    "https://www.googleapis.com/drive/v3/files?q=mimeType='application/vnd.google-apps.spreadsheet'",
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }
+  );
+  const data = await response.json();
+  return data.files;
+};
+
+export type Sheet = {
+  id: string;
+  name: string;
 };

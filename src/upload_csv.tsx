@@ -11,9 +11,8 @@ import {
   saveCSV,
 } from "./db";
 import GoogleLogin from "./google_login";
-import { useState } from "react";
-import { gapi } from "gapi-script";
-import { signOut, useGoogleAuth } from "./google";
+import { useEffect, useState } from "react";
+import { fetchSheets, Sheet, signOut, useGoogleAuth } from "./google";
 
 function UploadCsv() {
   const setData = useStore((state) => state.setData);
@@ -23,7 +22,7 @@ function UploadCsv() {
 
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const { email } = useGoogleAuth(setIsSignedIn);
+  const { email } = useGoogleAuth(setIsSignedIn, setAccessToken);
 
   const navigate = useNavigate();
 
@@ -70,15 +69,18 @@ function UploadCsv() {
     });
   };
 
+  // TODO bundle this? not quite right to have to check for multiple fields here
   return isSignedIn ? (
     <SignedInView
       email={email}
+      accessToken={accessToken}
       onSignout={() => signOut(setIsSignedIn, setAccessToken)}
     />
   ) : (
     <SignedOutView
       onChange={handleFileUpload}
       onUploadClick={triggerFileInput}
+      setAccessToken={setAccessToken}
     />
   );
 }
@@ -87,15 +89,20 @@ export default UploadCsv;
 
 const SignedInView = ({
   email,
+  accessToken,
   onSignout,
 }: {
   email: string | null;
+  accessToken: string | null;
   onSignout: () => void;
 }) => {
+  console.log("??? access token: " + accessToken);
+
   return (
     <div>
       {email && <div style={styles.email}>{email}</div>}
       <button onClick={onSignout}>Sign Out</button>
+      {accessToken && <SheetsList accessToken={accessToken} />}
     </div>
   );
 };
@@ -103,13 +110,15 @@ const SignedInView = ({
 const SignedOutView = ({
   onChange,
   onUploadClick,
+  setAccessToken,
 }: {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onUploadClick: () => void;
+  setAccessToken: (token: string | null) => void;
 }) => {
   return (
     <div style={styles.container}>
-      <GoogleLogin />
+      <GoogleLogin setAccessToken={setAccessToken} />
       <div style={styles.or}>Or</div>
       <input
         type="file"
@@ -121,7 +130,6 @@ const SignedOutView = ({
       <button type="button" onClick={onUploadClick} style={styles.customButton}>
         Upload CSV
       </button>
-      {/* <SheetsList /> */}
     </div>
   );
 };
@@ -145,36 +153,42 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: 10,
     marginBottom: 10,
   },
+  sheets: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "start",
+  },
+  sheetEntry: {
+    cursor: "pointer",
+    marginBottom: 10,
+  },
+  sheetsLabel: {
+    marginBottom: 10,
+    marginTop: 20,
+  },
 };
 
-const SheetsList = () => {
-  const [sheets, setSheets] = useState<{ id: string; name: string }[]>([]);
+const SheetsList = ({ accessToken }: { accessToken: string }) => {
+  const [sheets, setSheets] = useState<Sheet[]>([]);
 
-  const fetchSheets = async () => {
-    const accessToken = gapi.auth2
-      .getAuthInstance()
-      .currentUser.get()
-      .getAuthResponse().access_token;
-    console.log("token?" + accessToken);
-
-    const response = await fetch(
-      "https://www.googleapis.com/drive/v3/files?q=mimeType='application/vnd.google-apps.spreadsheet'",
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
-    const data = await response.json();
-    setSheets(data.files);
-  };
+  useEffect(() => {
+    const fetch = async () => {
+      const sheets = await fetchSheets(accessToken);
+      setSheets(sheets);
+    };
+    fetch();
+  }, [accessToken]);
 
   return (
     <div>
-      <button onClick={fetchSheets}>List My Google Sheets</button>
-      <ul>
+      <div style={styles.sheets}>
+        <div style={styles.sheetsLabel}>Select a sheet</div>
         {sheets.map((sheet) => (
-          <li key={sheet.id}>{sheet.name}</li>
+          <div key={sheet.id} style={styles.sheetEntry}>
+            {sheet.name}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
