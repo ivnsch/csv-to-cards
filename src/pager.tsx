@@ -186,9 +186,11 @@ const parseCustomLayout = (
 
   return layout.split("\n").map((line) =>
     line.split(/\s+/).map((token) => {
-      if (token.startsWith("$")) {
-        const columnName = token.slice(1); // Remove "$"
-        return rowData[columnName] ?? `[${columnName} not found]`;
+      const match = token.match(/^\$(\w+)([.,!?:;]*)$/);
+      if (match) {
+        const columnName = match[1];
+        const symbol = match[2];
+        return (rowData[columnName] ?? `[${columnName} not found]`) + symbol;
       }
       return token;
     })
