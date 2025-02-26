@@ -10,6 +10,7 @@ import CardSettingsView from "./card_settings";
 import { RightBar } from "./rightbar";
 import Shortcuts from "./shortcuts";
 import { Terms } from "./terms";
+import { Privacy } from "./privacy";
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/pager" element={<PagerScreen />} />
         <Route path="/shortcuts" element={<Shortcuts />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
       </Routes>
     </>
   );

@@ -10,6 +10,7 @@ export const SideBar = ({ isOpen }: { isOpen: boolean }) => {
       <div style={styles.separator} />
       <SideEntry text="Shortcuts" image="keyboard.svg" path="/shortcuts" />
       <SideEntry text="Terms" image="legal.svg" path="/terms" />
+      <SideEntry text="Privacy" image="privacy.svg" path="/privacy" />
     </div>
   );
 };
