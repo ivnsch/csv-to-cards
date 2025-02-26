@@ -53,7 +53,6 @@ function SelectCols() {
         </div>
 
         <textarea
-          placeholder="Enter custom format"
           onChange={(e) => setCustomLayout(e.target.value)}
           value={customLayout}
           style={styles.textarea}
