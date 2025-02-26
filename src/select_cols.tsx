@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { useStore } from "./store";
-import { saveFilters } from "./db";
+import { saveFilters, saveTemplate } from "./db";
 import { CheckboxRow } from "./checkbox_row";
 import { Tooltip } from "react-tooltip";
 
@@ -18,6 +18,11 @@ function SelectCols() {
 
     const updatedFilters = useStore.getState().filters;
     saveFilters(updatedFilters);
+  };
+
+  const saveCustomLayout = async (layout: string) => {
+    setCustomLayout(layout);
+    await saveTemplate(layout);
   };
 
   return (
@@ -53,7 +58,7 @@ function SelectCols() {
         </div>
 
         <textarea
-          onChange={(e) => setCustomLayout(e.target.value)}
+          onChange={(e) => saveCustomLayout(e.target.value)}
           value={customLayout}
           style={styles.textarea}
         />

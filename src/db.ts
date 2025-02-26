@@ -75,6 +75,25 @@ export const deleteDone = async () => {
   await db.delete("csvData", "done");
 };
 
+export const saveTemplate = async (template: string) => {
+  const db = await dbPromise;
+  await db.put("csvData", template, "template");
+};
+
+export const loadTemplate = async (): Promise<string | null> => {
+  const db = await dbPromise;
+  const res = db.get("csvData", "template");
+  if (res == undefined) {
+    return null;
+  }
+  return res;
+};
+
+export const deleteTemplate = async () => {
+  const db = await dbPromise;
+  await db.delete("csvData", "template");
+};
+
 export class MyCsv {
   constructor(
     public name: string,
