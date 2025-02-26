@@ -108,7 +108,7 @@ export const fetchSheetAsCSV = async (
   accessToken: string
 ): Promise<string> => {
   const response = await fetch(
-    `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`,
+    `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`,
     {
       headers: { Authorization: `Bearer ${accessToken}` },
     }
