@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 export const SideBar = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div style={{ ...styles.sideBar, left: isOpen ? "0" : "-220px" }}>
-      <SideEntry text="Load CSV" image="/upload.svg" path="/" />
+      <SideEntry text="CSV" image="/upload.svg" path="/" />
       <SideEntry text="Settings" image="/gear.svg" path="/card-settings" />
       <SideEntry text="Columns" image="/columns.svg" path="/select-cols" />
       <SideEntry text="Cards" image="card.svg" path="/pager" />
