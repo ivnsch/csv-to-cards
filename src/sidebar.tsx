@@ -7,6 +7,8 @@ export const SideBar = ({ isOpen }: { isOpen: boolean }) => {
       <SideEntry text="Settings" image="/gear.svg" path="/card-settings" />
       <SideEntry text="Columns" image="/columns.svg" path="/select-cols" />
       <SideEntry text="Cards" image="card.svg" path="/pager" />
+      <div style={styles.separator} />
+      <SideEntry text="Shortcuts" image="keyboard.svg" path="/shortcuts" />
     </div>
   );
 };
@@ -93,5 +95,13 @@ const styles: Record<string, React.CSSProperties> = {
   },
   entry: {
     cursor: "pointer",
+  },
+  separator: {
+    borderBottom: "0.5px solid gray",
+    // marginTop: 20,
+    marginBottom: 30,
+    height: 20,
+    // backgroundColor: "red",
+    width: "80%",
   },
 };

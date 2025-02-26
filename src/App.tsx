@@ -8,6 +8,7 @@ import { SideBar } from "./sidebar";
 import { useState } from "react";
 import CardSettingsView from "./card_settings";
 import { RightBar } from "./rightbar";
+import Shortcuts from "./shortcuts";
 
 function App() {
   const location = useLocation();
@@ -27,6 +28,7 @@ function App() {
         <Route path="/card-settings" element={<CardSettingsView />} />
         <Route path="/select-cols" element={<SelectCols />} />
         <Route path="/pager" element={<PagerScreen />} />
+        <Route path="/shortcuts" element={<Shortcuts />} />
       </Routes>
     </>
   );
