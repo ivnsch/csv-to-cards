@@ -22,7 +22,7 @@ function SelectCols() {
   return (
     <div style={styles.container}>
       <div style={styles.scrollContainer}>
-        <div style={styles.label}>Select columns to show</div>
+        <div style={styles.label}>Default layout</div>
         {Object.keys(filters).map((header) => (
           <CheckboxRow
             key={header}
@@ -31,6 +31,7 @@ function SelectCols() {
             toggleCheckbox={toggleFilterAndSave}
           />
         ))}
+        <Separator />
         <div style={styles.label}>Custom layout</div>
         <textarea
           placeholder="Enter custom format"
@@ -51,9 +52,41 @@ function SelectCols() {
   );
 }
 
+const Separator = () => {
+  return (
+    <div style={styles.separatorContainer}>
+      <hr style={styles.leftLine} />
+      <span style={styles.text}>OR</span>
+      <hr style={styles.rightLine} />
+    </div>
+  );
+};
+
 export default SelectCols;
 
 const styles: Record<string, React.CSSProperties> = {
+  separatorContainer: {
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 20,
+  },
+  leftLine: {
+    flex: 1,
+    border: "none",
+    borderTop: "1px solid white",
+    marginRight: 10,
+  },
+  rightLine: {
+    flex: 1,
+    border: "none",
+    borderTop: "1px solid white",
+    marginLeft: 10,
+  },
+  text: {
+    padding: "0 10px",
+    whiteSpace: "nowrap",
+  },
   container: {
     display: "flex",
     flexDirection: "column",
@@ -65,6 +98,7 @@ const styles: Record<string, React.CSSProperties> = {
     maxHeight: "calc(100vh - 300px)",
     marginBottom: 50,
     paddingRight: 30,
+    textAlign: "start",
   },
   label: {
     marginBottom: "20px",
@@ -92,6 +126,6 @@ const styles: Record<string, React.CSSProperties> = {
     width: "100%",
     height: 100,
     background: "transparent",
-    padding: 10,
+    // padding: 10,
   },
 };
