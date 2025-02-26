@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "gapi-script": "^1.2.0",
     "html2canvas": "^1.4.1",
     "idb": "^8.0.2",
     "papaparse": "^5.5.2",

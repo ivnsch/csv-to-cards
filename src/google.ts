@@ -1,0 +1,75 @@
+import { useEffect, useState } from "react";
+import { gapi } from "gapi-script";
+
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const SCOPES = "https://www.googleapis.com/auth/userinfo.email";
+
+export const useGoogleAuth = (setIsSignedIn: (signedIn: boolean) => void) => {
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const initAuth = async () => {
+      await gapi.client.init({
+        clientId: CLIENT_ID,
+        scope: SCOPES,
+      });
+
+      const authInstance = gapi.auth2.getAuthInstance();
+      const isSignedIn = authInstance.isSignedIn.get();
+
+      setIsSignedIn(isSignedIn);
+
+      // set email
+      if (isSignedIn) {
+        const user = authInstance.currentUser.get();
+        setEmail(user.getBasicProfile().getEmail());
+      }
+
+      // listen to changes of signedin status
+      authInstance.isSignedIn.listen((signedIn: boolean) => {
+        setIsSignedIn(signedIn);
+        if (signedIn) {
+          const user = authInstance.currentUser.get();
+          setEmail(user.getBasicProfile().getEmail());
+        } else {
+          setEmail(null);
+        }
+      });
+    };
+
+    gapi.load("client:auth2", initAuth);
+  }, [setIsSignedIn]);
+
+  return { email };
+};
+
+export const signIn = async (
+  setIsSignedIn: (signedIn: boolean) => void,
+  setAccessToken: (token: string) => void
+) => {
+  const authInstance = gapi.auth2.getAuthInstance();
+  await authInstance.signIn();
+  setIsSignedIn(true);
+  console.log("requesting access token");
+
+  const accessToken = authInstance.currentUser
+    .get()
+    .getAuthResponse().access_token;
+  console.log("got access token: " + accessToken);
+
+  const user = gapi.auth2.getAuthInstance().currentUser.get();
+  const email = user.getBasicProfile().getEmail();
+  console.log("email: " + email);
+
+  // authInstance.currentUser.get()
+  setAccessToken(accessToken);
+};
+
+export const signOut = (
+  setIsSignedIn: (signedIn: boolean) => void,
+  setAccessToken: (token: string | null) => void
+) => {
+  gapi.auth2.getAuthInstance().signOut();
+  setIsSignedIn(false);
+  setAccessToken(null);
+};
