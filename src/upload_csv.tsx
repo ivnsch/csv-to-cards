@@ -12,7 +12,13 @@ import {
 } from "./db";
 import GoogleLogin from "./google_login";
 import { useEffect, useState } from "react";
-import { fetchSheets, Sheet, signOut, useGoogleAuth } from "./google";
+import {
+  fetchSheetAsCSV,
+  fetchSheets,
+  Sheet,
+  signOut,
+  useGoogleAuth,
+} from "./google";
 
 function UploadCsv() {
   const setData = useStore((state) => state.setData);
@@ -44,6 +50,23 @@ function UploadCsv() {
     deleteDone();
   };
 
+  const onParsedCsv = (fileName: string, result: Papa.ParseResult<CsvRow>) => {
+    const csvEntries = result.data;
+    const headers = result.meta.fields || [];
+
+    const csv = new MyCsv(fileName, headers, csvEntries);
+    initCsv(csv);
+  };
+
+  const initCsv = (csv: MyCsv) => {
+    clearAllState();
+
+    setData(csv);
+    saveCSV(csv);
+
+    navigate("/card-settings");
+  };
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -54,17 +77,7 @@ function UploadCsv() {
       header: true,
       skipEmptyLines: true,
       complete: (result: Papa.ParseResult<CsvRow>) => {
-        const csvEntries = result.data;
-        const headers = result.meta.fields || [];
-
-        const csv = new MyCsv(file.name, headers, csvEntries);
-
-        clearAllState();
-
-        setData(csv);
-        saveCSV(csv);
-
-        navigate("/card-settings");
+        onParsedCsv(file.name, result);
       },
     });
   };
@@ -75,6 +88,7 @@ function UploadCsv() {
       email={email}
       accessToken={accessToken}
       onSignout={() => signOut(setIsSignedIn, setAccessToken)}
+      onParsedSelectedCsv={(fileName, result) => onParsedCsv(fileName, result)}
     />
   ) : (
     <SignedOutView
@@ -91,10 +105,15 @@ const SignedInView = ({
   email,
   accessToken,
   onSignout,
+  onParsedSelectedCsv,
 }: {
   email: string | null;
   accessToken: string | null;
   onSignout: () => void;
+  onParsedSelectedCsv: (
+    fileName: string,
+    parseResult: Papa.ParseResult<CsvRow>
+  ) => void;
 }) => {
   console.log("??? access token: " + accessToken);
 
@@ -102,7 +121,12 @@ const SignedInView = ({
     <div>
       {email && <div style={styles.email}>{email}</div>}
       <button onClick={onSignout}>Sign Out</button>
-      {accessToken && <SheetsList accessToken={accessToken} />}
+      {accessToken && (
+        <SheetsList
+          accessToken={accessToken}
+          onParsedSelectedCsv={onParsedSelectedCsv}
+        />
+      )}
     </div>
   );
 };
@@ -168,7 +192,16 @@ const styles: Record<string, React.CSSProperties> = {
   },
 };
 
-const SheetsList = ({ accessToken }: { accessToken: string }) => {
+const SheetsList = ({
+  accessToken,
+  onParsedSelectedCsv,
+}: {
+  accessToken: string;
+  onParsedSelectedCsv: (
+    fileName: string,
+    parseResult: Papa.ParseResult<CsvRow>
+  ) => void;
+}) => {
   const [sheets, setSheets] = useState<Sheet[]>([]);
 
   useEffect(() => {
@@ -179,16 +212,35 @@ const SheetsList = ({ accessToken }: { accessToken: string }) => {
     fetch();
   }, [accessToken]);
 
+  const fetchSheet = async (sheet: Sheet) => {
+    const csvString = await fetchSheetAsCSV(sheet.id, accessToken);
+    console.log("csv: " + JSON.stringify(csvString));
+    const parsed = parseCsvString(csvString);
+    console.log("parsed: " + JSON.stringify(parsed));
+    onParsedSelectedCsv(sheet.name, parsed);
+  };
+
   return (
     <div>
       <div style={styles.sheets}>
         <div style={styles.sheetsLabel}>Select a sheet</div>
         {sheets.map((sheet) => (
-          <div key={sheet.id} style={styles.sheetEntry}>
+          <div
+            key={sheet.id}
+            style={styles.sheetEntry}
+            onClick={() => fetchSheet(sheet)}
+          >
             {sheet.name}
           </div>
         ))}
       </div>
     </div>
   );
+};
+
+const parseCsvString = (str: string): Papa.ParseResult<CsvRow> => {
+  return Papa.parse<CsvRow>(str, {
+    header: true,
+    skipEmptyLines: true,
+  });
 };

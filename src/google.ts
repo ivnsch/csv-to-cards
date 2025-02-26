@@ -102,3 +102,19 @@ export type Sheet = {
   id: string;
   name: string;
 };
+
+export const fetchSheetAsCSV = async (
+  sheetId: string,
+  accessToken: string
+): Promise<string> => {
+  const response = await fetch(
+    `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }
+  );
+
+  if (!response.ok) throw new Error("Failed to fetch CSV");
+
+  return await response.text();
+};
