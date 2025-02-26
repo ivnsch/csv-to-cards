@@ -11,6 +11,11 @@ export const SideBar = ({ isOpen }: { isOpen: boolean }) => {
       <SideEntry text="Shortcuts" image="keyboard.svg" path="/shortcuts" />
       <SideEntry text="Terms" image="legal.svg" path="/terms" />
       <SideEntry text="Privacy" image="privacy.svg" path="/privacy" />
+      <SideEntryExternal
+        text="Discord"
+        image="discord.svg"
+        href="https://discord.gg/M9eMT3VguP"
+      />
     </div>
   );
 };
@@ -64,6 +69,30 @@ const SideEntryInternal = ({
   );
 };
 
+const SideEntryExternal = ({
+  text,
+  image,
+  href,
+}: {
+  text: string;
+  image: string;
+  href: string;
+}) => {
+  return (
+    <div style={styles.entryContainer}>
+      <img src={image} style={styles.entryImg} />
+      <a
+        style={styles.externalLink}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div style={styles.entry}>{text}</div>
+      </a>
+    </div>
+  );
+};
+
 const styles: Record<string, React.CSSProperties> = {
   sideBar: {
     position: "absolute",
@@ -105,5 +134,9 @@ const styles: Record<string, React.CSSProperties> = {
     height: 20,
     // backgroundColor: "red",
     width: "80%",
+  },
+  externalLink: {
+    color: "#ffffffde",
+    fontWeight: "normal",
   },
 };
