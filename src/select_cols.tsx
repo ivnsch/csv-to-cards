@@ -48,7 +48,7 @@ function SelectCols() {
           <Tooltip
             id="help-tooltip"
             place="top"
-            content="Enter column names in any order, separated by spaces"
+            content="Enter a template with column names like this: $column"
           />
         </div>
 

@@ -98,17 +98,3 @@ export const useStore = create<Store>((set) => ({
 const toFilters = (data: MyCsv): Filters => {
   return Object.fromEntries(data.headers.map((header) => [header, true]));
 };
-
-// returns rows with respectively array of values corresponding to column names
-export const parseCustomLayout = (
-  layout: string,
-  rowData: CsvRow
-): string[][] | null => {
-  const str = layout.trim();
-  if (str.length == 0) {
-    return null;
-  }
-  return str
-    .split("\n")
-    .map((row) => row.split(" ").map((col) => rowData[col] || ""));
-};

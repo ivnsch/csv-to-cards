@@ -1,5 +1,5 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
-import { CsvRow, Filters, parseCustomLayout, useStore } from "./store";
+import { CsvRow, Filters, useStore } from "./store";
 import { loadPage, saveCSV, saveDone, savePage } from "./db";
 import html2canvas from "html2canvas";
 import GlobalEnterListener from "./global_enter_listener";
@@ -175,6 +175,23 @@ const Page = ({
         )}
       </div>
     </div>
+  );
+};
+
+const parseCustomLayout = (
+  layout: string,
+  rowData: CsvRow
+): string[][] | null => {
+  if (!layout) return null;
+
+  return layout.split("\n").map((line) =>
+    line.split(/\s+/).map((token) => {
+      if (token.startsWith("$")) {
+        const columnName = token.slice(1); // Remove "$"
+        return rowData[columnName] ?? `[${columnName} not found]`;
+      }
+      return token;
+    })
   );
 };
 
