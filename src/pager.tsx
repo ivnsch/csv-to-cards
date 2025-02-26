@@ -217,30 +217,30 @@ const DefaultPageEntry = ({
 };
 
 const CopyButton = ({ value }: { value: string }) => {
-  return (
-    <div
-      id="copy-icon"
-      style={styles.copyIcon}
-      onMouseEnter={(e) =>
-        (e.currentTarget.style.backgroundImage = "url('copy_white.svg')")
-      }
-      onMouseLeave={(e) =>
-        (e.currentTarget.style.backgroundImage = "url('copy_grey.svg')")
-      }
-      onClick={() => copyToClipboard(value)}
-    />
-  );
-};
+  const [copied, setCopied] = useState(false);
 
-const copyToClipboard = (text: string) => {
-  navigator.clipboard
-    .writeText(text)
-    .then(() => {
-      console.log("Copied to clipboard:", text);
-    })
-    .catch((err) => {
-      console.error("Failed to copy:", err);
-    });
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div style={styles.copyButtonContainer}>
+      <div
+        id="copy-icon"
+        style={styles.copyIcon}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.backgroundImage = "url('copy_white.svg')")
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.backgroundImage = "url('copy_grey.svg')")
+        }
+        onClick={() => copyToClipboard()}
+      />
+      {copied && <span style={styles.copyTooltip}>Copied!</span>}
+    </div>
+  );
 };
 
 const Value = ({ index, column }: { index: number; column: string }) => {
@@ -534,5 +534,21 @@ const styles: Record<string, React.CSSProperties> = {
   },
   buttonsContainer: {
     marginBottom: 100,
+  },
+  copyTooltip: {
+    position: "absolute",
+    bottom: "120%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    background: "white",
+    color: "black",
+    padding: "6px 12px",
+    borderRadius: "8px",
+    fontSize: "14px",
+    whiteSpace: "nowrap",
+  },
+  copyButtonContainer: {
+    position: "relative",
+    display: "inline-block",
   },
 };
