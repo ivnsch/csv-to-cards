@@ -8,7 +8,7 @@ const GoogleLogin = ({
 }) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
 
-  useGoogleAuth(setIsSignedIn);
+  useGoogleAuth(setIsSignedIn, setAccessToken);
 
   return (
     <div>
