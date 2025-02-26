@@ -16,8 +16,8 @@ import {
   fetchSheetAsCSV,
   fetchSheets,
   Sheet,
-  signOut,
-  useGoogleAuth,
+  //   signOut,
+  //   useGoogleAuth,
 } from "./google";
 
 function UploadCsv() {
@@ -26,9 +26,9 @@ function UploadCsv() {
   const setDone = useStore((state) => state.setDone);
   const setCardIndex = useStore((state) => state.setCardIndex);
 
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const { email } = useGoogleAuth(setIsSignedIn, setAccessToken);
+  //   const [isSignedIn, setIsSignedIn] = useState(false);
+  //   const [accessToken, setAccessToken] = useState<string | null>(null);
+  //   const { email } = useGoogleAuth(setIsSignedIn, setAccessToken);
 
   const navigate = useNavigate();
 
@@ -71,8 +71,6 @@ function UploadCsv() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    console.log("loaded file: " + file.name);
-
     Papa.parse<CsvRow>(file, {
       header: true,
       skipEmptyLines: true,
@@ -82,25 +80,52 @@ function UploadCsv() {
     });
   };
 
-  // TODO bundle this? not quite right to have to check for multiple fields here
-  return isSignedIn ? (
-    <SignedInView
-      email={email}
-      accessToken={accessToken}
-      onSignout={() => signOut(setIsSignedIn, setAccessToken)}
-      onParsedSelectedCsv={(fileName, result) => onParsedCsv(fileName, result)}
-    />
-  ) : (
-    <SignedOutView
-      onChange={handleFileUpload}
-      onUploadClick={triggerFileInput}
-      setAccessToken={setAccessToken}
-    />
+  return (
+    <DefaultView onChange={handleFileUpload} onUploadClick={triggerFileInput} />
   );
+
+  //   return isSignedIn ? (
+  //     <SignedInView
+  //       email={email}
+  //       accessToken={accessToken}
+  //       onSignout={() => signOut(setIsSignedIn, setAccessToken)}
+  //       onParsedSelectedCsv={(fileName, result) => onParsedCsv(fileName, result)}
+  //     />
+  //   ) : (
+  //     <SignedOutView
+  //       onChange={handleFileUpload}
+  //       onUploadClick={triggerFileInput}
+  //       setAccessToken={setAccessToken}
+  //     />
+  //   );
 }
 
 export default UploadCsv;
 
+const DefaultView = ({
+  onChange,
+  onUploadClick,
+}: {
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onUploadClick: () => void;
+}) => {
+  return (
+    <div style={styles.container}>
+      <input
+        type="file"
+        accept=".csv"
+        onChange={onChange}
+        id="fileUpload"
+        style={styles.input}
+      />
+      <button type="button" onClick={onUploadClick} style={styles.customButton}>
+        Upload CSV
+      </button>
+    </div>
+  );
+};
+
+// @ts-ignore
 const SignedInView = ({
   email,
   accessToken,
@@ -115,8 +140,6 @@ const SignedInView = ({
     parseResult: Papa.ParseResult<CsvRow>
   ) => void;
 }) => {
-  console.log("??? access token: " + accessToken);
-
   return (
     <div>
       {email && <div style={styles.email}>{email}</div>}
@@ -131,6 +154,12 @@ const SignedInView = ({
   );
 };
 
+// @ts-ignore
+const foo = () => {
+  console.log("Hello");
+};
+
+// @ts-ignore
 const SignedOutView = ({
   onChange,
   onUploadClick,
