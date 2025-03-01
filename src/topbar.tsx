@@ -65,14 +65,14 @@ export const TopBar = ({
     <div style={styles.topBar}>
       <img
         style={styles.menuImg}
-        src="/menu_button.svg"
+        src="menu_button.svg"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       />
       {title(data)}
       {data && (
         <img
           style={styles.downloadImg}
-          src="/download_white.svg"
+          src="download_white.svg"
           onClick={() => downloadCsv()}
         />
       )}
