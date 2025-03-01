@@ -20,7 +20,7 @@ function SelectCols() {
     saveFilters(updatedFilters);
   };
 
-  const saveTemplate = async (layout: string) => {
+  const setAndSaveTemplate = async (layout: string) => {
     setTemplate(layout);
     await saveTemplate(layout);
   };
@@ -58,7 +58,7 @@ function SelectCols() {
         </div>
 
         <textarea
-          onChange={(e) => saveTemplate(e.target.value)}
+          onChange={(e) => setAndSaveTemplate(e.target.value)}
           value={template}
           style={styles.textarea}
         />
